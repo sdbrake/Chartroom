@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Chartroom workshop</title>
+<style>
+
+:root{--paper:#f2efe9;--paper2:#e6e2d9;--ink:#1f2933;--muted:#77808c;--olive:#2f7d5b;--rust:#c1502f;--amber:#b07d2b;--violet:#4a6fa5;--navy:#182030}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--paper);color:var(--ink)}body{font-family:Arial,Helvetica,sans-serif;overflow:hidden}#viewport{position:fixed;inset:0;display:grid;place-items:center}#canvas{position:relative;width:1600px;height:900px;flex-shrink:0;transform-origin:center center;background:var(--paper)}
+.slide{position:absolute;inset:0;padding:76px 100px 68px;--accent:var(--olive);--fit:1;overflow:visible}.slide[hidden]{display:none!important}.slide-inner{height:100%;display:flex;flex-direction:column;gap:24px;position:relative;z-index:1}.slide h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:calc(80px * var(--fit));line-height:1.08;margin:0;letter-spacing:-.025em;overflow-wrap:break-word}.eyebrow{color:var(--accent);font-size:calc(22px * var(--fit));font-weight:bold;letter-spacing:.14em;text-transform:uppercase;margin:0}.content{font-size:calc(36px * var(--fit));line-height:1.32;min-height:0;flex:1}.content p{margin:0 0 .65em}.content ul{margin:0;padding:0;list-style:none}.rail>li{padding:.43em 0;border-top:1px solid #b9bab6}.children{padding-left:1.1em!important;margin-top:.25em!important;font-size:.82em;list-style:disc!important}.children>li{padding:.15em 0}.content strong{font-weight:700}.cards-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px}.cards-list>li{padding:30px;background:var(--paper2);border-top:5px solid var(--accent)}.columns{display:grid;grid-template-columns:1fr 1fr;gap:64px}.column h2{font-family:Georgia,serif;font-weight:400;font-size:calc(44px * var(--fit));margin:0 0 20px;color:var(--accent)}.polarity .column:first-child{--accent:var(--rust)}.polarity .column:last-child{--accent:var(--olive)}
+.cover,.part,.big{background:var(--navy);color:var(--paper)}.cover .slide-inner,.part .slide-inner,.divider .slide-inner,.big .slide-inner{justify-content:center}.cover h1,.part h1,.divider h1,.big h1{font-size:calc(116px * var(--fit));max-width:1300px}.cover .content:empty,.part .content:empty,.divider .content:empty,.big .content:empty{display:none}.quote .body{font-family:Georgia,serif;font-style:italic;font-size:calc(58px * var(--fit));line-height:1.22}.attribution,.credit,.citation{font-size:calc(23px * var(--fit));line-height:1.35;color:var(--muted)}.attribution{letter-spacing:.04em}.footer{font-family:Georgia,serif;font-style:italic;font-size:calc(27px * var(--fit));margin:0}.takeaway{border-left:5px solid var(--accent);padding:15px 24px;background:var(--paper2)}
+.photo,.somber{background:var(--navy);color:var(--paper)}.background-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.photo:after,.somber:after{content:'';position:absolute;inset:0;background:rgba(24,32,48,.34)}.somber:after{background:rgba(24,32,48,.62)}.photo h1,.somber h1{font-size:calc(112px * var(--fit));text-shadow:0 3px 16px #182030}.photo .slide-inner,.somber .slide-inner{justify-content:center}.photo .content:empty,.somber .content:empty{display:none}.photo .credit,.somber .credit{color:var(--paper)}
+.exhibit{margin:0;min-height:0;height:100%;display:flex;flex-direction:column;gap:12px}.exhibit img{width:100%;height:100%;min-height:0;object-fit:contain}.exhibit figcaption{flex:none}.img .content{display:flex;flex-direction:column;gap:16px}.img .exhibit{flex:1}.portraits{display:grid;grid-template-columns:1fr 1fr;gap:60px;height:100%;min-height:0}.portrait{margin:0;display:flex;flex-direction:column;min-height:0;gap:12px}.portrait img{width:100%;height:360px;object-fit:contain}.portrait figcaption{font-family:Georgia,serif;font-size:calc(38px * var(--fit))}.scholar-grid{display:grid;grid-template-columns:390px 1fr;gap:54px;height:100%;min-height:0}.scholar-grid img{width:100%;max-height:480px;object-fit:contain}.scholar-copy{min-width:0}.scholar-copy .citation{margin-bottom:28px}
+.meters{display:flex;gap:60px;margin-top:auto;padding-top:12px}.meter{flex:1}.meter-label{font-size:calc(21px * var(--fit));margin-bottom:12px}.axis-labels{display:flex;justify-content:space-between;font-size:18px;letter-spacing:.06em;margin-bottom:14px}.axis-labels span:first-child{color:var(--rust)}.axis-labels span:last-child{color:var(--olive)}.track{height:7px;position:relative;background:linear-gradient(to right,var(--rust),var(--paper2),var(--olive));margin:0 9px 10px}.marker{position:absolute;left:var(--position);top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--paper)}.lens-axis{margin:80px 0}.lens-axis .track{height:14px}.lens-axis .axis-labels{font-size:28px}
+#progress{position:fixed;left:0;bottom:0;height:4px;background:var(--amber);width:0;z-index:10}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media print{@page{size:1600px 900px;margin:0}html,body{height:auto;overflow:visible}#viewport{position:static;display:block}#canvas{transform:none!important;height:auto} .slide,.slide[hidden]{display:block!important;position:relative;width:1600px;height:900px;break-after:page;page-break-after:always} [data-reveal]{visibility:visible!important;opacity:1!important}#progress,#player-status{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body data-mode="teaching" data-deck-id="workshop" data-storage-key="chartroom:c3dc240abc97bebf">
+<main id="viewport" aria-label="Lecture slides"><div id="canvas">
+<section class="slide cover" data-slide="0" style="--accent:var(--olive)" aria-labelledby="slide-title-0">
+<div class="slide-inner">
+<p class="eyebrow">An annotated demonstration</p>
+<h1 id="slide-title-0">The Chartroom workshop</h1>
+<div class="content"></div>
+
+</div>
+</section>
+
+<section class="slide facts" data-slide="1" style="--accent:var(--olive)" aria-labelledby="slide-title-1" hidden inert>
+<div class="slide-inner">
+<h1 id="slide-title-1">Your words, on the screen</h1>
+<div class="content"><ul class="rail">
+<li data-reveal>Write the words you want to show.</li>
+<li data-reveal>Keep the explanation in your notes.<ul class="children">
+<li>Indent to keep a thought beneath its parent.</li>
+</ul></li>
+<li data-reveal>Export the same lecture for teaching and review.</li>
+</ul></div>
+
+</div>
+</section>
+
+<section class="slide part" data-slide="2" style="--accent:var(--olive)" aria-labelledby="slide-title-2" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-2">Give the lecture an arc</h1>
+<div class="content"></div>
+
+</div>
+</section>
+
+<section class="slide cards" data-slide="3" style="--accent:var(--olive)" aria-labelledby="slide-title-3" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-3">Two ideas</h1>
+<div class="content"><ul class="cards-list">
+<li><strong>Teaching:</strong> Reveal one point at a time.</li>
+<li><strong>Review:</strong> Let students see the whole slide.</li>
+</ul></div>
+
+</div>
+</section>
+
+<section class="slide two-col" data-slide="4" style="--accent:var(--olive)" aria-labelledby="slide-title-4" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-4">Compare without clutter</h1>
+<div class="content"><div class="columns"><div class="column"><h2>On the slide</h2><ul class="rail">
+<li>A short claim.</li>
+<li>A question worth asking.</li>
+</ul></div>
+<div class="column"><h2>In the notes</h2><ul class="rail">
+<li>The explanation.</li>
+<li>The worked example.</li>
+</ul></div></div></div>
+<p class="footer">What belongs on the screen?</p>
+</div>
+</section>
+
+<section class="slide big" data-slide="5" style="--accent:var(--olive)" aria-labelledby="slide-title-5" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-5">Let a sentence stand</h1>
+<div class="content"><div class="body"><p>A slide is a prompt, not a script.</p></div></div>
+
+</div>
+</section>
+
+<section class="slide quote" data-slide="6" style="--accent:var(--olive)" aria-labelledby="slide-title-6" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-6">Words worth pausing over</h1>
+<div class="content"><div class="body"><p>Use the author&#39;s actual words.</p></div><p class="attribution">Demonstration text — not a historical quotation</p></div>
+
+</div>
+</section>
+
+<section class="slide lens" data-slide="7" style="--accent:var(--olive)" aria-labelledby="slide-title-7" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Optional thematic device</p>
+<h1 id="slide-title-7">A spectrum</h1>
+<div class="content"><div class="lens-axis"><div class="axis-labels"><span>Closed</span><span>Open</span></div><div class="track"></div></div></div>
+
+</div>
+</section>
+
+<section class="slide facts" data-slide="8" style="--accent:var(--olive)" aria-labelledby="slide-title-8" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-8">Set the position yourself</h1>
+<div class="content"><ul class="rail">
+<li data-reveal>Meters are explicit annotations, never guessed data.</li>
+</ul></div>
+<div class="meters"><div class="meter" data-value="25"><div class="meter-label">Policy A</div><div class="axis-labels"><span>Closed</span><span>Open</span></div><div class="track" role="meter" aria-label="Policy A" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"><span class="marker" style="--position:25%"></span></div></div>
+<div class="meter" data-value="80"><div class="meter-label">Policy B</div><div class="axis-labels"><span>Closed</span><span>Open</span></div><div class="track" role="meter" aria-label="Policy B" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><span class="marker" style="--position:80%"></span></div></div></div>
+</div>
+</section>
+
+<section class="slide img" data-slide="9" style="--accent:var(--olive)" aria-labelledby="slide-title-9" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-9">Show the whole figure</h1>
+<div class="content"><figure class="exhibit"><img class="" src="images/chartroom-demo.png" alt="Abstract example graphic with a warm-to-cool band and a framed circle."></figure></div>
+<div class="credit">Original Chartroom Studio demonstration graphic. Not historical evidence.</div>
+</div>
+</section>
+
+<section class="slide photo" data-slide="10" style="--accent:var(--olive)" aria-labelledby="slide-title-10" hidden inert>
+<img class="background-image" src="images/chartroom-demo.png" alt="Abstract demonstration graphic."><div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-10">A chapter beat</h1>
+<div class="content"></div>
+<div class="credit">Layout demonstration using an illustration, not a documentary photograph.</div>
+</div>
+</section>
+
+<section class="slide somber" data-slide="11" style="--accent:var(--olive)" aria-labelledby="slide-title-11" hidden inert>
+<img class="background-image" src="images/chartroom-demo.png" alt="Abstract demonstration graphic."><div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-11">A quieter beat</h1>
+<div class="content"></div>
+<div class="credit">The same illustration, showing the heavier veil.</div>
+</div>
+</section>
+
+<section class="slide facts" data-slide="12" style="--accent:var(--olive)" aria-labelledby="slide-title-12" hidden inert>
+<div class="slide-inner">
+<p class="eyebrow">Give the lecture an arc</p>
+<h1 id="slide-title-12">Ready for discussion</h1>
+<div class="content"><ul class="rail">
+<li>Keep the lecturer&#39;s words.</li>
+<li>Check the preview.</li>
+<li>Save the project before sharing the export.</li>
+</ul></div>
+<p class="footer">What would you change in your next lecture?</p>
+</div>
+</section>
+</div></main>
+<div id="progress" aria-hidden="true"></div>
+<p id="player-status" class="sr-only" role="status" aria-live="polite"></p>
+<script>
+(function deckPlayer() {
+    'use strict';
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const review = document.body.dataset.mode === 'review';
+    let index = 0, step = 0;
+    const max = i => review || !slides[i] ? 0 : slides[i].querySelectorAll('[data-reveal]').length;
+    const clamp = (n,lo,hi) => Math.max(lo,Math.min(hi,n));
+    const getState = () => ({index,step,count:slides.length});
+    let parentOrigin = location.origin;
+    try {parentOrigin = document.referrer ? new URL(document.referrer).origin : (location.ancestorOrigins && location.ancestorOrigins[0]) || location.origin;} catch (_) {}
+    // Chromium reports file:// in ancestorOrigins but serializes message origins as null.
+    if (parentOrigin === 'file://') parentOrigin = 'null';
+    const images=Array.from(document.images);
+    const post = type => {if (parent !== window) parent.postMessage({type,...getState(),resourcesReady:images.every(img=>img.complete),failedImages:images.filter(img=>img.complete && !img.naturalWidth).length},parentOrigin === 'null' ? '*' : parentOrigin);};
+    window.addEventListener('message',event=>{
+      if(parent === window || event.source !== parent || event.origin !== parentOrigin || !event.data || event.data.type !== 'chartroom-command')return;
+      const actions={next,previous,home,end,go:()=>go(event.data.index),state:()=>post('chartroom-state'),escape:()=>post('chartroom-escape')};
+      if(Object.prototype.hasOwnProperty.call(actions,event.data.command))actions[event.data.command]();
+    });
+    const storageKey = document.body.dataset.storageKey;
+    if (!review) {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        if (saved && Number.isInteger(saved.index) && Number.isInteger(saved.step) && slides.length) {
+          index=clamp(saved.index,0,slides.length-1);step=clamp(saved.step,0,max(index));
+        }
+      } catch (_) { /* Local-file privacy settings and corrupt saves are harmless. */ }
+    }
+    function show() {
+      if (!review) {try {localStorage.setItem(storageKey,JSON.stringify(getState()));} catch (_) {}}
+      slides.forEach((s,i) => {
+        s.hidden = i !== index; s.inert = i !== index;
+        s.setAttribute('aria-hidden',String(i !== index));
+        s.querySelectorAll('[data-reveal]').forEach((el,j) => {
+          const visible = review || j < (i === index ? step : 0);
+          el.style.visibility = visible ? 'visible' : 'hidden';
+          el.setAttribute('aria-hidden',String(!visible));
+        });
+      });
+      post('chartroom-state');
+      document.getElementById('progress').style.width = (slides.length ? (index + 1) / slides.length * 100 : 0) + '%';
+      document.getElementById('player-status').textContent = slides.length ? 'Slide ' + (index + 1) + ' of ' + slides.length + ': ' + slides[index].querySelector('h1').textContent : 'No slides';
+    }
+    function go(n) { if (Number.isFinite(n) && slides.length) {index=clamp(Math.trunc(n),0,slides.length-1);step=0;show();} return getState(); }
+    function next() {if(step<max(index)){step++;show();}else if(index<slides.length-1)go(index+1);return getState();}
+    function previous() {if(step>0){step--;show();}else if(index>0){index--;step=max(index);show();}return getState();}
+    function home(){return go(0);}
+    function end(){if(slides.length){index=slides.length-1;step=max(index);show();}return getState();}
+    function resize() {
+      const canvas=document.getElementById('canvas');
+      canvas.style.position='absolute';canvas.style.left='50%';canvas.style.top='50%';
+      canvas.style.transform='translate(-50%,-50%) scale(' + Math.min(innerWidth/1600,innerHeight/900) + ')';
+    }
+    function measure(s) {
+      const inner=s.querySelector('.slide-inner'),content=s.querySelector('.content');
+      const overflowX=Math.max(0,inner.scrollWidth-inner.clientWidth,content.scrollWidth-content.clientWidth);
+      const overflowY=Math.max(0,inner.scrollHeight-inner.clientHeight,content.scrollHeight-content.clientHeight);
+      return {overflow:overflowX>2 || overflowY>2,overflowX,overflowY};
+    }
+    function audit() {
+      const results=slides.map((s,i)=>{
+        const wasHidden=s.hidden;s.hidden=false;
+        s.style.setProperty('--fit',1);
+        let fit=1,overflow=measure(s);
+        while(overflow.overflow && fit>.751){fit=Math.max(.75,fit-.025);s.style.setProperty('--fit',fit.toFixed(3));overflow=measure(s);}
+        s.dataset.overflow=String(overflow.overflow);s.dataset.fit=fit.toFixed(3);s.hidden=wasHidden;
+        return {slide:i,title:s.querySelector('h1').textContent,fit:Number(fit.toFixed(3)),...overflow};
+      });
+      document.body.dataset.overflow=String(results.some(r=>r.overflow));
+      return results;
+    }
+    window.ChartroomPlayer = {next,previous,home,end,go,getState,audit};
+    window.addEventListener('resize',resize);
+    window.addEventListener('load',()=>{resize();audit();post('chartroom-state');});
+    images.forEach(img=>{const settled=()=>{audit();post('chartroom-state');};img.addEventListener('load',settled);img.addEventListener('error',settled);});
+    resize();audit();
+    document.addEventListener('keydown',event => {
+      if(event.altKey || event.ctrlKey || event.metaKey || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(event.target.tagName) || event.target.isContentEditable)return;
+      const action = {ArrowRight:next,ArrowDown:next,' ':next,PageDown:next,ArrowLeft:previous,ArrowUp:previous,PageUp:previous,Home:home,End:end,Escape:()=>post('chartroom-escape')}[event.key];
+      if(action){event.preventDefault();action();}
+    });
+    show();
+  })();
+</script>
+</body>
+</html>

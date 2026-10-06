@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publish Chartroom Studio on GitHub Pages</title><style>body{max-width:960px;margin:0 auto;padding:36px 26px 90px;background:#f2efe9;color:#1f2933;font:18px/1.65 Arial,sans-serif}h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.2}h1{font-size:46px}h2{font-size:32px;margin-top:46px}a{color:#245d45}a:focus-visible{outline:3px solid #4a6fa5}pre{background:#182030;color:#f2efe9;padding:22px;overflow:auto;font:15px/1.6 Consolas,monospace}code{font-family:Consolas,monospace}table{border-collapse:collapse;width:100%;font-size:16px}td,th{padding:12px;text-align:left;border-bottom:1px solid #c2c1b8}th{background:#e6e2d9}nav{font-size:15px;border-bottom:2px solid #b07d2b;padding-bottom:18px}li{margin-bottom:9px}@media(max-width:600px){body{font-size:16px;padding:20px}h1{font-size:34px}table{display:block;overflow:auto}}</style></head><body><nav><a href="../START HERE.html">Start here</a> · <a href="../index.html">Open Studio</a> · <a href="RULES.html">Rules</a> · <a href="ANNOTATIONS.html">Annotations</a></nav>
+<h1>Publish Chartroom Studio on GitHub Pages</h1>
+<p>These are manual steps for the repository owner. Nothing in Studio pushes files, creates a repository, or publishes a site. No hosted address has been chosen or verified for this release yet.</p>
+<h2>Prepare the public files</h2>
+<p>Finish the checks in <code>docs/DEVELOPING.md</code> and update <code>VERIFICATION.md</code> with actual results before publishing.</p>
+<p>Use one of these sources:</p>
+<ul>
+<li>Extract <code>dist/Chartroom-Studio-GitHub.zip</code> and upload its reviewed contents.</li>
+<li>Use reviewed tracked files from the canonical source repository, including the generated offline download required by the hosted app.</li>
+</ul>
+<p>Do not upload the entire working folder. Keep personal <code>.chartroom.json</code> projects, source notes, private lectures, temporary exports, test artifacts, and local backups outside the public upload. The supplied demonstration project is a public example, not a place for personal lecture material.</p>
+<p><strong><code>.gitignore</code> does not protect arbitrary files dragged into GitHub's web upload page.</strong> It also does not remove files already tracked by Git. Review the actual files to be published, including archive contents.</p>
+<p>The repository ZIP is for the public source repository and hosted app. <code>downloads/Chartroom-Studio-Offline.zip</code> is the separate user download. Do not upload either archive in place of extracting the repository ZIP's contents.</p>
+<h2>Publish from main and the root</h2>
+<ol>
+<li>Sign in to GitHub and create or choose the repository you intend to publish. Review its visibility; the instructions here assume a public repository.</li>
+<li>Upload the clean repository contents to the <code>main</code> branch, or commit and push the reviewed tracked files yourself. Put <code>index.html</code>, <code>src/</code>, <code>docs/</code>, <code>downloads/</code>, and <code>.nojekyll</code> at the repository root, not inside another enclosing folder. Check that <code>.nojekyll</code> was included; file pickers may hide dotfiles.</li>
+<li>In the repository, open <strong>Settings → Pages</strong>.</li>
+<li>Under <strong>Build and deployment</strong>, choose <strong>Deploy from a branch</strong>.</li>
+<li>Choose <strong>main</strong> and <strong>/ (root)</strong>, then save.</li>
+<li>Wait for GitHub's Pages deployment to finish. Use the address GitHub displays in Pages settings; do not assume an address before that step.</li>
+<li>Open the site in a fresh browser tab. Check the demonstration, previews, palette comparison, handbook links, <strong>Present lecture</strong>, project save/open, and both exports. Download <strong>Download offline Studio</strong>, extract it, and open its <code>index.html</code> locally.</li>
+<li>Record the actual site address, browser, date, and results in <code>VERIFICATION.md</code>. A local HTTP test is useful, but it is not proof that GitHub Pages deployed successfully.</li>
+</ol>
+<p>If <strong>Settings → Pages</strong> is unavailable, check repository permissions and the account's Pages eligibility before changing the project structure.</p>
+<h2>Update the site later</h2>
+<p>Make changes in the canonical source repository. Run the tests, regenerate the handbook and both release ZIPs, and review the files again. Upload or push the updated public files yourself. Wait for deployment, then check the live site and offline download.</p>
+<p>Publishing Studio does not publish anyone's browser drafts. It also does not update teaching or student exports that were previously shared. To publish a course review site, use a separately reviewed <strong>Student library .zip</strong> export and preserve its extracted folder structure.</p>
+<p>When moving your own work between local Studio and the hosted site, use <strong>Save project</strong> in the old copy and <strong>Open project</strong> in the new one. Browser autosave does not move with the app.</p>
+</body></html>

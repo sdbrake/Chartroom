@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Chartroom rules</title><style>body{max-width:960px;margin:0 auto;padding:36px 26px 90px;background:#f2efe9;color:#1f2933;font:18px/1.65 Arial,sans-serif}h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.2}h1{font-size:46px}h2{font-size:32px;margin-top:46px}a{color:#245d45}a:focus-visible{outline:3px solid #4a6fa5}pre{background:#182030;color:#f2efe9;padding:22px;overflow:auto;font:15px/1.6 Consolas,monospace}code{font-family:Consolas,monospace}table{border-collapse:collapse;width:100%;font-size:16px}td,th{padding:12px;text-align:left;border-bottom:1px solid #c2c1b8}th{background:#e6e2d9}nav{font-size:15px;border-bottom:2px solid #b07d2b;padding-bottom:18px}li{margin-bottom:9px}@media(max-width:600px){body{font-size:16px;padding:20px}h1{font-size:34px}table{display:block;overflow:auto}}</style></head><body><nav><a href="../START HERE.html">Start here</a> · <a href="../index.html">Open Studio</a> · <a href="RULES.html">Rules</a> · <a href="ANNOTATIONS.html">Annotations</a></nav>
+<h1>The Chartroom rules</h1>
+<p>This rulebook describes the compiler and renderer shipped with Chartroom Studio 1.3. Its annotation reference is <a href="ANNOTATIONS.html">ANNOTATIONS.md</a>.</p>
+<h2>1. Authorship is a hard boundary</h2>
+<ol>
+<li>Preserve the author's visible words, punctuation, spelling, ordering, and parent–child relationships. Never invent a title, fact, quotation, transition, citation, percentage, image, or syllabus entry.</li>
+<li>Remove only explicit structural markup, HTML comments, and private <code>*asides*</code>, <code>%%asides%%</code>, or <code>@notes</code>. Interpret <code>**bold**</code> without rewriting its words. Whitespace at line edges is structural.</li>
+<li>Short slides are prompts for a speaker. Density warnings are invitations to edit the <strong>notes</strong>, not permission for the software to shorten a sentence.</li>
+<li>Shared teaching and student HTML contain no private notes or embedded source model. A saved project DOES contain them and is a private authoring file.</li>
+<li>A named section is created only from an authored divider or <code>@part</code>. Never infer a historical arc from the topic.</li>
+</ol>
+<h2>2. Deterministic layout selection</h2>
+<table>
+<thead>
+<tr>
+<th>Authored structure</th>
+<th>Layout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First and only <code># Title</code></td>
+<td>Navy cover</td>
+</tr>
+<tr>
+<td><code>## Heading</code>, no visible body or points</td>
+<td>Section divider</td>
+</tr>
+<tr>
+<td><code>## Heading</code>, with points or leading body</td>
+<td>Editorial facts rail</td>
+</tr>
+<tr>
+<td><code>@part</code></td>
+<td>Navy major-part divider</td>
+</tr>
+<tr>
+<td><code>@cards</code></td>
+<td>Side-by-side concept cards</td>
+</tr>
+<tr>
+<td><code>@two-col</code> and two <code>###</code> headings</td>
+<td>Two explicitly named columns</td>
+</tr>
+<tr>
+<td><code>@quote</code> with body text</td>
+<td>Serif pull quote and optional attribution</td>
+</tr>
+<tr>
+<td><code>@big</code></td>
+<td>Navy statement or definition interlude</td>
+</tr>
+<tr>
+<td><code>@photo path</code></td>
+<td>Full-bleed image, light veil</td>
+</tr>
+<tr>
+<td><code>@somber path</code></td>
+<td>Full-bleed image, heavy veil</td>
+</tr>
+<tr>
+<td><code>@img path</code></td>
+<td>Whole, uncropped image exhibit</td>
+</tr>
+<tr>
+<td><code>@lens</code></td>
+<td>Closed–open thematic axis, no guessed score</td>
+</tr>
+<tr>
+<td><code>@duo</code> with two portrait directives</td>
+<td>Paired whole portraits and captions</td>
+</tr>
+<tr>
+<td><code>@scholar path</code></td>
+<td>Portrait with authored citation/takeaway</td>
+</tr>
+</tbody>
+</table>
+<p>Multiple conflicting types, unknown directives, unsupported notation, unsafe paths, invalid percentages, orphan children, or ambiguous columns are <strong>errors</strong>. They never get silently “fixed.” Source lines accompany errors. Export stops until errors are resolved.</p>
+<p>For fidelity, visible body paragraphs must precede bullets. A paragraph after bullets would otherwise change order in this model; it is rejected. Use another bullet, an explicit footer, or a new slide. Columns require bullet content beneath each named heading.</p>
+<h2>3. Chartroom's visual language</h2>
+<p>Warm paper, navy interludes, book-serif headlines, system-sans body text, generous margins, and thin editorial rules. No external font installation or font request.</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>paper</td>
+<td><code>#f2efe9</code></td>
+<td>Reading ground</td>
+</tr>
+<tr>
+<td>paper2</td>
+<td><code>#e6e2d9</code></td>
+<td>Deeper warm fills</td>
+</tr>
+<tr>
+<td>ink</td>
+<td><code>#1f2933</code></td>
+<td>Primary text</td>
+</tr>
+<tr>
+<td>muted</td>
+<td><code>#77808c</code></td>
+<td>Secondary labels</td>
+</tr>
+<tr>
+<td>navy</td>
+<td><code>#182030</code></td>
+<td>Covers and interludes</td>
+</tr>
+<tr>
+<td>olive</td>
+<td><code>#2f7d5b</code></td>
+<td>Open/cool pole, accent</td>
+</tr>
+<tr>
+<td>rust</td>
+<td><code>#c1502f</code></td>
+<td>Closed/warm pole, accent</td>
+</tr>
+<tr>
+<td>amber</td>
+<td><code>#b07d2b</code></td>
+<td>Accent</td>
+</tr>
+<tr>
+<td>violet</td>
+<td><code>#4a6fa5</code></td>
+<td>Institutional blue accent</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A fixed <strong>1600 × 900</strong> canvas scales uniformly and centers in the available viewport. Never stretch or crop the canvas to fill a screen.</li>
+<li>Empty dividers and <code>@part</code> advance the accent cycle: olive → violet → rust → amber. Their authored heading becomes the inherited eyebrow. <code>@hue</code> and <code>@eyebrow</code> override one slide.</li>
+<li>Accent cycling indicates structure, not political meaning. Only <code>@polarity</code> explicitly sets the left comparison column to rust and the right to olive.</li>
+<li>Facts use a rail separated by thin rules. Children stay smaller and indented under their parent.</li>
+<li>No corner numerals, OPEN/CLOSED chips, or on-slide navigation pad. A <strong>4px bottom progress line</strong> is the only persistent visual navigation mark in a teaching deck.</li>
+<li>Programmatic fitting reduces text only to a bounded floor (75% of its base size); it never deletes content. The browser export gate renders every slide, checks fit, and stops on remaining overflow. Splitting a crowded slide is the author's job.</li>
+<li>Bounds checking is not a substitute for judgment: view the deck on the actual classroom screen. Automatic fitting cannot decide whether a line break is elegant or a figure is pedagogically legible.</li>
+</ul>
+<h3>Named school palettes (v1.1)</h3>
+<p>The table above defines <strong>Chartroom Classic</strong>, which remains the default and is unchanged. The course-wide <strong>Deck palette</strong> control also offers:</p>
+<table>
+<thead>
+<tr>
+<th>Palette</th>
+<th>Main colors</th>
+<th>Supporting accents</th>
+<th>Reading ground</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buster</td>
+<td><code>#990026</code> burgundy, <code>#ffffff</code> white, <code>#000000</code> black</td>
+<td><code>#999999</code>, <code>#497791</code>, <code>#2E9FC9</code></td>
+<td><code>#f3f0eb</code></td>
+</tr>
+<tr>
+<td>Agnar</td>
+<td><code>#00275D</code> navy, <code>#B2223B</code> red</td>
+<td><code>#3C5383</code>, <code>#ABADB0</code></td>
+<td><code>#FFFFFF</code></td>
+</tr>
+</tbody>
+</table>
+<p>School colors are exact: primary-color covers, interludes, headlines and library sidebars; reversed white titles; blue/red accents and gray rules. School covers/interludes have a 12px accent edge. Gray and bright blue are not used for small low-contrast text. Supporting shades are Buster secondary text <code>#595959</code> and small open-pole labels <code>#416a81</code>; Agnar secondary text <code>#596273</code> and pale card fills <code>#f1f3f7</code>. Credits on dark grounds use white. Photo veils keep their original opacity but adopt the selected primary hue.</p>
+<p>The existing <code>olive</code>, <code>rust</code>, <code>violet</code>, and <code>amber</code> annotation names remain semantic slots, not literal color requests. Buster remaps them to <code>#497791</code>, <code>#990026</code>, <code>#990026</code>, and <code>#2E9FC9</code>; Agnar to <code>#3C5383</code>, <code>#B2223B</code>, <code>#B2223B</code>, and <code>#ABADB0</code>. Closed remains warm/red, open remains cool/blue. Explicit polarity headings use warm/cool colors; other school headings and eyebrows use the primary school color, or white on dark slides.</p>
+<p>A palette changes presentation, never notes, slide ordering, private annotations, or reveal behavior. <code>course.palette</code> is validated against named constants; unknown values are rejected, never interpolated as CSS. Missing values mean Classic. Preview and browser preflight use the same selected palette as both exports. Use a Studio copy that recognizes the selected palette ID; earlier copies do not recognize later additions.</p>
+<h3>Editorial palettes</h3>
+<p>The updated local Studio also includes four editorial palettes. Classic, Buster and Agnar keep their original rendering.</p>
+<table>
+<thead>
+<tr>
+<th>Palette / ID</th>
+<th>Reading ground / text</th>
+<th>Cover</th>
+<th>Warm / cool accents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Atlantic / <code>atlantic</code></td>
+<td><code>#F4F7FA</code> / <code>#172A3A</code></td>
+<td><code>#174A7E</code></td>
+<td><code>#B64B2C</code> / <code>#006D77</code></td>
+</tr>
+<tr>
+<td>Field Notes / <code>field-notes</code></td>
+<td><code>#F4F1E8</code> / <code>#263B32</code></td>
+<td><code>#264C3B</code></td>
+<td><code>#9B542C</code> / <code>#376B63</code></td>
+</tr>
+<tr>
+<td>Aubergine / <code>aubergine</code></td>
+<td><code>#F7F1ED</code> / <code>#352B37</code></td>
+<td><code>#51344D</code></td>
+<td><code>#A64B35</code> / <code>#286B68</code></td>
+</tr>
+<tr>
+<td>Night Seminar / <code>night-seminar</code></td>
+<td><code>#17212B</code> / <code>#EEF2F3</code></td>
+<td><code>#101820</code></td>
+<td><code>#E8A36C</code> / <code>#7FCBC4</code></td>
+</tr>
+</tbody>
+</table>
+<p>The first three use quiet, light content surfaces and colored covers. Night Seminar uses dark reading surfaces, darker covers/sidebar, lighter <code>#243444</code> card and takeaway panels, <code>#B3C0CC</code> secondary text, and a dark browser color-scheme. Warm/cool labels remain text-labeled; color is not the only cue.</p>
+<p>Small text is checked against its actual surface. Dark cover/part/statement meter labels use supporting apricot <code>#F2BC8C</code> and aqua <code>#7FCBC4</code>, rather than the darker accent inks of the light palettes. Takeaways explicitly use the normal text color on the panel surface, even on a dark slide. Card and takeaway panels are separated by space. Captions and library controls receive palette-aware text colors.</p>
+<p>These choices preserve the existing slide structure, system fonts, reveal rules and offline exports. Photo overlays are not a guarantee of readability for every imported photograph; inspect those slides. Night Seminar especially needs a real-projector check in bright rooms. Open <a href="PALETTES.html">the comparison page</a> to see identical demonstration slides in all four palettes.</p>
+<h2>4. Images are real, local assets</h2>
+<ul>
+<li>Images must be provided by the author: PNG, JPEG, GIF, or WebP. No web search, hotlinked image, SVG, guessed photo, or substitute evidence.</li>
+<li><code>@photo</code> uses a <strong>0.34 dark veil</strong>; <code>@somber</code> uses <strong>0.62</strong>. Background images use cover sizing and may crop. The author chooses solemn treatment explicitly.</li>
+<li><code>@img</code> and portraits use <strong>contain</strong> sizing: the full image remains visible. Use this for graphs, memes, illustrations, and text-bearing figures.</li>
+<li>Exports keep image bytes in separate relative files, so a human can replace an image. Studio's private project embeds them only to make saving and transfer reliable.</li>
+<li>The image path in the notes must exactly match the project's local asset path. Missing images block export. Browser export also checks actual image decoding.</li>
+<li>Authors provide alt text, credit, license, and verified attribution. The tool does not certify rights, accuracy, or permission to distribute an image.</li>
+</ul>
+<h2>5. Meters are claims made by the author</h2>
+<p>No meter unless explicitly annotated. Values must be between 0% and 100%. Closed is rust at the left; open is olive at the right. Labels sit <strong>above</strong> the gradient track. Dual policy meters retain the author's directive order and labels. The software never assigns a historical openness score.</p>
+<h2>6. Teaching and review are different products</h2>
+<p><strong>Teaching:</strong> facts reveal one top-level point at a time; its children appear with it. Right/Space/PageDown advances a reveal, then a slide. Left/PageUp reverses reveals, then the slide. Home/End go to the endpoints. <code>@norev</code> or <code>@flash</code> reveals all facts immediately. Cards and columns show their complete authored structure. Position is saved under a content-specific key when browser storage is available; corrupted or blocked storage does not stop the deck.</p>
+<p><strong>Review:</strong> every point is visible. Selecting or reselecting any lecture starts at slide one. Previous/Next move whole slides and stop at boundaries. No teaching resume state is used. The navy-sidebar library is a separate output, with a coming-soon state, keyboard support, mobile lecture menu, and fullscreen viewing.</p>
+<p>Inactive slides are hidden and inert. Printing shows all slides and all reveals. System fonts can differ by operating system, so pixel-perfect typography across machines is not promised. Small portrait screens preserve the canvas rather than making classroom-sized text magically large; landscape/fullscreen is recommended.</p>
+<h2>7. Offline, portable, and explicit</h2>
+<p>The runtime is HTML/CSS/JavaScript. An extracted local copy runs in a modern desktop browser without a server, developer installation, or network connection. A hosted copy needs a connection to load; there is no service worker or guaranteed offline reload. Browser support is recorded in <a href="VERIFICATION.html">verification</a>. Projects stay in the browser unless you save or share them yourself; there is no cloud sync. Browser localStorage is an unencrypted draft cache, not a backup. Use <strong>Save project</strong> before changing origins, browsers, or local copies, then <strong>Open project</strong> in the new app.</p>
+<p>The project is the source of truth. Exports are snapshots. Updating notes does not alter old downloads, another person's files, or a hosted site. Sharing and publication are manual. Export never pushes GitHub or deploys Apps Script.</p>
+<h2>8. Customization and extensions</h2>
+<p>The engine is intentionally readable: grammar in <code>src/parser.js</code>, layout/CSS/player in <code>src/renderer.js</code>, project/ZIP checks in <code>src/package.js</code>, real-browser export gate in <code>src/preflight.js</code>, workshop UI in <code>src/app.js</code> and <code>src/studio.css</code>. The parser exposes its core rules as <code>ChartroomParser.rules</code>.</p>
+<p>To add a notation or change a design rule: write a failing test, update the parser/model and renderer consistently, update this rulebook and its examples, then run unit, browser, extracted-archive, and privacy checks. Never extend a directive by silently changing its existing meaning.</p>
+</body></html>

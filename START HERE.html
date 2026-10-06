@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Start here · Chartroom Studio</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f2efe9;color:#1f2933;font:18px/1.65 Arial,Helvetica,sans-serif}header{background:#182030;color:#f2efe9;padding:50px max(6vw,24px)}main{max-width:960px;margin:auto;padding:30px 24px 70px}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.15}h1{font-size:clamp(38px,6vw,66px);max-width:880px;margin:16px 0}h2{font-size:32px;margin-top:42px}.eyebrow{font-size:14px;letter-spacing:.08em;color:#c5b58f}.lede{color:#d5d9df}a{color:#245d45;text-underline-offset:4px}.button{display:inline-block;background:#2f7d5b;color:white;padding:12px 22px;border-radius:5px;text-decoration:none;margin:10px 12px 0 0;font-weight:bold}.secondary{background:#f2efe9;color:#182030}.small{font-size:15px}.note{border-left:4px solid #b07d2b;padding:12px 22px;background:#e6e2d9}pre{padding:22px;background:#182030;color:#f2efe9;overflow:auto;font:16px/1.6 Consolas,monospace}code{font-family:Consolas,monospace}li{margin-bottom:12px}a:focus-visible{outline:3px solid #4a6fa5;outline-offset:4px}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Chartroom Studio · v1.3</div><h1>Slideshow generator and converter.</h1><p class="lede">Lecture notes and slideshows output separately.</p><a class="button" href="index.html">Open Studio</a><a class="button secondary" href="docs/README.html">Read the handbook</a></header>
+<main>
+<h2>Open Studio</h2>
+<p>If you are using a hosted copy, choose <strong>Open Studio</strong> above. To work locally, download <code>Chartroom-Studio-Offline.zip</code>, extract the entire archive, and open <code>index.html</code> or this page in a modern desktop browser. Keep the extracted folder together; do not open HTML files inside an archive viewer. You do not need Node.js, Python, Hermes, or a terminal to use the app.</p>
+<p class="note">The local copy works without an Internet connection. A hosted page needs a connection to load again: Studio has no service worker or guaranteed offline cache. Use the hosted app's <strong>Download offline Studio</strong> link before you need to work without a connection.</p>
+<h2>Make a lecture</h2>
+<ol><li>Choose <strong>Open demonstration</strong>, <strong>New blank project</strong>, or <strong>Open project</strong>. Save your current project before replacing it.</li><li>Write annotated notes or import <code>.md</code> / <code>.txt</code> files. Add your images under <strong>Local images</strong>; their listed paths must match the notes exactly.</li><li>Choose teaching or review preview. Follow diagnostics to their source lines. Studio checks images and slide overflow before export; split a crowded slide in the notes.</li><li><strong>Save project</strong> keeps your editable notes and images. Export a teaching or student ZIP and extract it before opening. Share the student export, not your private project.</li></ol>
+<h2>Write annotated notes</h2>
+<pre># Your lecture title
+
+## Your main point
+- Your exact words.
+  - A dependent detail.
+- Your next point.
+
+*This explanation stays in your private notes.*
+
+## A question for the class? @big</pre>
+<p>One <code>#</code> cover comes first; each <code>##</code> starts a slide. This is a restricted annotation language, not all of Markdown. <code>**Bold words**</code> are visible. Single-star asides, <code>%%private spans%%</code>, <code>@notes</code> lines, and HTML comments stay private. Plain text is public, including answers left unmarked.</p>
+<p><strong>Insert slide</strong> adds complete layouts, including cards, columns, quotations, image exhibits, paired portraits, scholar citations, and the closed/open axis. <strong>Insert an element or tool</strong> adds individual annotations below the current line; Bold can wrap selected words. Replace the highlighted sample text. See the <a href="docs/ANNOTATIONS.html">complete annotation reference</a>.</p>
+<h2>Choose a palette</h2>
+<p><strong>Deck palette</strong> offers Chartroom Classic, Buster, Agnar, Atlantic, Field Notes, Aubergine, and Night Seminar. The choice applies to every lecture and the student review page and is saved in your project. Projects without a palette use Classic. <a href="docs/PALETTES.html">Compare the editorial palettes</a>; check image contrast and Night Seminar on the classroom display. Export again to update an older shared deck.</p>
+<h2>Present without exporting</h2>
+<p>Select a lecture and choose <strong>Present lecture</strong>. Studio checks it, then opens a fixed teaching-mode snapshot at the first slide. The editor and private notes are hidden. Fullscreen is requested; if the browser refuses it, the deck fills the page.</p>
+<ul><li>Right arrow, Space, or Page Down advances a reveal, then a slide.</li><li>Left arrow or Page Up goes backward. Home and End jump to the endpoints.</li><li>Press Tab or move to the upper-right corner to expose the help/exit strip.</li><li>Escape or <strong>Exit presentation</strong> returns to Studio.</li></ul>
+<p class="note"><strong>Exiting exposes the private editor again.</strong> Blank the projector or stop screen sharing before leaving presentation mode if your notes must remain unseen. There is no separate private presenter window.</p>
+<h2>Choose the right file to share</h2>
+<ul><li><strong>Save project</strong> downloads a private <code>.chartroom.json</code> file with all source notes, private asides, course settings, and embedded images. Reopen it with <strong>Open project</strong>.</li><li><strong>Save .md</strong> downloads the selected lecture's source, including private notes. It does not include image files or the whole project.</li><li><strong>Teaching decks .zip</strong> contains public slides and referenced images. Facts reveal a parent point and its children together.</li><li><strong>Student library .zip</strong> contains public review slides and course navigation. All points are visible; selecting a lecture starts at its first slide. Students have Previous/Next, a counter, a mobile lecture menu, and fullscreen.</li></ul>
+<p>Public exports omit private annotations and the source project. Unavailable lectures contribute only their library labels. Check visible text and images before sharing; only explicitly marked notes are private. Exports are snapshots, not synced copies. Updating notes does not change an older download or a published course site.</p>
+<h2>Keep a project backup</h2>
+<p>Studio processes projects in your browser. It has no cloud sync or project-upload service. Autosave uses browser <code>localStorage</code>, which is neither encrypted storage nor a backup. Other people using the same browser profile may be able to read it. Clearing site data, storage limits, or private browsing can remove drafts.</p>
+<p>Use <strong>Save project</strong> regularly and keep personal projects outside the source repository. Autosave belongs to a browser profile and origin; local-file storage also depends on the browser and file location. To move from an old folder to a new copy or a hosted site, use <strong>Save project</strong> in the old app and <strong>Open project</strong> in the new one.</p>
+<h2>Guides</h2>
+<ul><li><a href="docs/README.html">Everyday use and sharing</a></li><li><a href="docs/RULES.html">Design, wording, privacy, and validation rules</a></li><li><a href="docs/ANNOTATIONS.html">Annotation syntax and older Chartroom HTML conversion</a></li><li><a href="docs/DEVELOPING.html">Developer guide</a> · <a href="docs/VERIFICATION.html">Verification status and limitations</a></li><li><a href="examples/blank-lecture.md" download>Blank lecture notes</a> · <a href="examples/lecture-notes.md" download>Demonstration notes</a> · <a href="examples/demo.chartroom.json" download>Demonstration project</a></li></ul>
+<p>Future development belongs in the canonical source repository, not an extracted offline copy. The repository's <code>GITHUB.md</code> explains manual publication. Upload only the clean repository ZIP contents or reviewed tracked files, not a working folder containing private projects. <code>.gitignore</code> does not protect arbitrary web uploads.</p>
+<p class="small">Chartroom Studio · v1.3 · <a href="LICENSE">MIT license</a>. Rights to imported images and lecture content remain separate.</p>
+</main>
+</body>
+</html>

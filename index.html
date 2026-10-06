@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Chartroom Studio — slideshow generator and converter</title>
+<link rel="stylesheet" href="src/studio.css">
+<link rel="stylesheet" href="src/presenter.css">
+</head>
+<body>
+<a class="skip" href="#notes">Skip to lecture notes</a>
+<header class="masthead">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">▥</span><div><h1>Chartroom <em>Studio</em></h1><p>Slideshow generator and converter.</p></div></div>
+  <div class="file-actions"><span class="offline">● Local processing</span><button id="save-recovery" hidden>Save recovery copy</button><button id="open-project">Open project</button><button id="save-project" class="primary">Save project</button></div>
+</header>
+<div id="notice" role="status" aria-live="polite"></div>
+<div class="workspace">
+  <aside class="course-panel" aria-label="Course organizer">
+    <p class="eyebrow">01 / Organize</p>
+    <label for="course-title">Course / collection</label><input id="course-title" maxlength="1000">
+    <label for="course-code">Course code <span class="optional">optional</span></label><input id="course-code" maxlength="100">
+    <label for="palette">Deck palette</label><select id="palette" aria-describedby="palette-help"></select>
+    <p id="palette-help" class="small">Applies to every lecture and the student review page.</p>
+    <p class="small"><a href="docs/PALETTES.html" target="_blank" rel="noopener">Compare palettes</a></p>
+    <div class="section-heading"><h2>Lectures</h2><button id="add-lecture" aria-label="Add lecture">+ Add</button></div>
+    <ol id="lecture-list"></ol>
+    <div class="row"><button id="move-up" title="Move selected lecture earlier">↑ Move</button><button id="move-down" title="Move selected lecture later">↓ Move</button><button id="remove-lecture" title="Remove selected lecture">Remove</button></div>
+    <hr>
+    <button id="import-notes" class="wide">Import .md / .txt notes</button>
+    <button id="new-project" class="wide quiet">New blank project</button>
+    <button id="load-demo" class="wide quiet">Open demonstration</button>
+    <p class="small">Lecture notes and slideshows output separately.<br>Changing the notes updates both on the next export.</p>
+    <div class="sidebar-bottom"><a href="START HERE.html" target="_blank" rel="noopener">Quick start &amp; rules ↗</a><p><a id="offline-download" hidden href="downloads/Chartroom-Studio-Offline.zip" download>Download offline Studio</a></p><p class="small">v1.3</p></div>
+  </aside>
+  <main>
+    <section class="lecture-meta" aria-label="Lecture settings">
+      <div><label for="lecture-title">Library label <span class="optional">does not rewrite the cover</span></label><input id="lecture-title" maxlength="1000"></div>
+      <label class="check"><input id="available" type="checkbox"> Available for students</label>
+    </section>
+    <div class="work-panels">
+      <section class="writing-panel" aria-label="Lecture authoring">
+        <div class="section-heading"><div><p class="eyebrow">02 / Write</p><h2>Annotated notes</h2></div><button id="save-notes">Save .md</button></div>
+        <label for="notes" class="sr-only">Annotated lecture notes</label>
+        <textarea id="notes" spellcheck="false" wrap="off" aria-describedby="notes-help" placeholder="# Your lecture title&#10;&#10;## A slide heading&#10;- Your exact words."></textarea>
+        <p id="notes-help" class="small"># cover · ## slide · - point · <code>*aside*</code> stays private</p>
+        <div class="row"><label for="insert-kind" class="sr-only">Slide template</label><select id="insert-kind"><option value="facts">Facts</option><option value="cards">Cards</option><option value="two-col">Two columns</option><option value="quote">Quotation</option><option value="big">Big statement</option><option value="part">Major part</option><option value="photo">Photo beat</option><option value="somber">Somber photo</option><option value="img">Whole image</option><option value="lens">Open / closed axis</option><option value="duo">Paired portraits</option><option value="scholar">Scholar citation</option></select><button id="insert-slide">Insert slide</button></div>
+        <section class="element-tools" aria-label="Insert an element or tool">
+          <label for="insert-element-kind">Insert an element or tool</label>
+          <div class="row"><select id="insert-element-kind" aria-describedby="element-help element-placement"></select><button id="insert-element">Insert element</button></div>
+          <p id="element-help" class="small"></p>
+          <pre id="element-syntax" aria-label="Annotation to insert"></pre>
+          <p id="element-placement" class="small">Place your cursor in a slide. Elements go below that line (or on a blank line); Bold wraps selected words. Replace the highlighted sample text.</p>
+          <p id="element-status" class="small" role="status" aria-live="polite"></p>
+        </section>
+        <details id="image-tools"><summary>Local images <span id="asset-count"></span></summary>
+          <p class="small">Import raster images for this lecture. The listed path must match the annotation exactly. Images stay local and travel in your saved project.</p>
+          <button id="import-images">Add images</button><ul id="assets"></ul>
+        </details>
+        <details><summary>Slide map &amp; private asides</summary><div id="slide-map"></div></details>
+      </section>
+      <section class="preview-panel" aria-label="Preview and validation">
+        <div class="section-heading"><div><p class="eyebrow">03 / Check</p><h2>See what you’ll share</h2></div><button id="rebuild">Rebuild preview</button></div>
+        <div class="preview-options"><label for="preview-mode">Deck mode</label><select id="preview-mode"><option value="review">Review — all points</option><option value="teaching">Teaching — stepwise</option></select><button id="preview-library">Preview course library</button><button id="present-lecture" class="primary">Present lecture</button></div>
+        <div id="preview-wrap"><iframe id="preview" title="Generated slide preview" sandbox="allow-scripts" allow="fullscreen"></iframe></div>
+        <div class="preview-nav"><button id="preview-home" aria-label="First slide">↤ First</button><button id="preview-prev">← Previous</button><span id="preview-count" aria-live="polite">—</span><button id="preview-next">Next →</button></div>
+        <p id="build-status" role="status">Loading workshop…</p>
+        <ul id="diagnostics" aria-label="Build diagnostics"></ul>
+        <section class="exports" aria-label="Export your work"><p class="eyebrow">04 / Export</p><h2>Ready to leave the workshop?</h2><div class="export-grid"><button id="export-teaching" class="primary">Teaching decks .zip</button><button id="export-student" class="primary">Student library .zip</button></div><p class="small">Extract ZIPs before opening. Student export includes no source notes or private asides. <strong>Save project</strong> keeps your editable notes and images.</p></section>
+      </section>
+    </div>
+    <footer><span id="save-status" role="status">Not yet saved</span><span>Local autosave is a convenience, not a backup. Download your project.</span></footer>
+  </main>
+</div>
+<input id="open-project-input" class="sr-only" type="file" accept=".json,.chartroom" tabindex="-1">
+<input id="import-notes-input" class="sr-only" type="file" accept=".md,.txt,text/plain,text/markdown" multiple tabindex="-1">
+<input id="import-images-input" class="sr-only" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple tabindex="-1">
+<section id="presentation" role="dialog" aria-modal="true" aria-label="Lecture presentation" data-ready="false" hidden>
+  <p id="presentation-status" role="status" aria-live="polite"></p>
+  <div id="presentation-toolbar"><p>Arrows / Space: advance · Home / End: jump · Esc: return to Studio</p><button id="presentation-exit">Exit presentation</button></div>
+</section>
+<script src="src/parser.js"></script>
+<script src="src/renderer.js"></script>
+<script src="src/package.js"></script>
+<script src="examples/demo.js"></script>
+<script src="src/preflight.js"></script>
+<script src="src/insert.js"></script>
+<script src="src/presenter.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>

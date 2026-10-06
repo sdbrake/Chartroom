@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Annotated lecture notes: complete v1 reference</title><style>body{max-width:960px;margin:0 auto;padding:36px 26px 90px;background:#f2efe9;color:#1f2933;font:18px/1.65 Arial,sans-serif}h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.2}h1{font-size:46px}h2{font-size:32px;margin-top:46px}a{color:#245d45}a:focus-visible{outline:3px solid #4a6fa5}pre{background:#182030;color:#f2efe9;padding:22px;overflow:auto;font:15px/1.6 Consolas,monospace}code{font-family:Consolas,monospace}table{border-collapse:collapse;width:100%;font-size:16px}td,th{padding:12px;text-align:left;border-bottom:1px solid #c2c1b8}th{background:#e6e2d9}nav{font-size:15px;border-bottom:2px solid #b07d2b;padding-bottom:18px}li{margin-bottom:9px}@media(max-width:600px){body{font-size:16px;padding:20px}h1{font-size:34px}table{display:block;overflow:auto}}</style></head><body><nav><a href="../START HERE.html">Start here</a> · <a href="../index.html">Open Studio</a> · <a href="RULES.html">Rules</a> · <a href="ANNOTATIONS.html">Annotations</a></nav>
+<h1>Annotated lecture notes: complete v1 reference</h1>
+<p>This is a deliberately small Markdown-like language, <strong>not all of Markdown</strong>. Write UTF-8 <code>.md</code> or <code>.txt</code> files. Start from <code>examples/blank-lecture.md</code>; open <code>examples/demo.chartroom.json</code> for a complete working example with its local image.</p>
+<h2>Inserting from the workshop menu</h2>
+<p>You do not need to type these directives from memory. Below the editor, choose <strong>Insert an element or tool</strong> to see grouped choices, a plain-language explanation and the exact annotation that will be inserted. Put the cursor inside the intended slide and click <strong>Insert element</strong>. The snippet goes below that line (or on a blank line), with its first editable placeholder selected. Bold wraps selected words; all other elements require an unselected cursor and preserve your prose.</p>
+<p>The menu covers bullets/cards, nested details, paragraphs, bold, private notes/comments, labels, footers, citations, takeaways, meters, image descriptions/credits, reveal settings, column polarity and accent colors. Duplicate metadata and incompatible placements are refused with guidance instead of silently overwriting your notes. Replace sample labels, percentages and sources yourself. Image files still need importing under <strong>Local images</strong>.</p>
+<p>Full layouts, including paired portraits, scholar citations and the thematic axis, belong in the adjacent <strong>Insert slide</strong> menu. The compiler syntax below is unchanged.</p>
+<h2>A minimal lecture</h2>
+<pre><code class="language-markdown"># Your lecture title
+
+## Your first slide
+- Your exact words.
+- Another point.
+  - A dependent detail.
+
+*This is a private speaker aside.*
+
+## A discussion question @big
+</code></pre>
+<p>One <code>#</code> cover comes first. Every <code>##</code> starts a new slide. A heading without points is a divider; adding bullets makes it a facts rail. Plain body lines before bullets are visible paragraphs. A blank line does not start a slide.</p>
+<h3>Private versus public text</h3>
+<ul>
+<li><code>**Bold words**</code> remain visible, in bold.</li>
+<li><code>*Single-star words*</code> are private speaker notes, <strong>not visible emphasis</strong>.</li>
+<li><code>%%Private words%%</code> is the alternative, including multiline private spans.</li>
+<li><code>@notes Your private explanation</code> explicitly marks one whole line private.</li>
+<li><code>&lt;!-- comments --&gt;</code> are omitted and may span lines.</li>
+<li>Unclosed aside/comment delimiters are errors. Do not use literal unpaired asterisks as multiplication notation; spell it out in this restricted language.</li>
+<li>Plain text is visible. Do not place an answer in ordinary text expecting the tool to infer that it should be secret.</li>
+<li>HTML is escaped, not executed. Markdown links, tables, ordered lists, code fences, general Markdown plugins, and math typesetting are not supported. Use an image exhibit for a finished equation, table or graph.</li>
+</ul>
+<h2>Layout flags</h2>
+<p>Put a layout at the end of a <code>##</code> heading, or on its own line immediately below that heading. Only one layout per slide. <code>@norev</code>/<code>@flash</code> may accompany a layout.</p>
+<h3>Cards</h3>
+<pre><code class="language-markdown">## Two concepts @cards
+- **Concept A:** Your exact words.
+- **Concept B:** Your exact words.
+</code></pre>
+<p>Every top-level bullet is one card. Children remain inside their parent's card. Keep the number of cards modest; long content will need splitting.</p>
+<h3>Two explicitly named columns</h3>
+<pre><code class="language-markdown">## A comparison @two-col
+### Left heading
+- First point.
+  - Dependent detail.
+### Right heading
+- Second point.
+@footer Your closing question?
+</code></pre>
+<p>Exactly two <code>###</code> headings are required. Their bullets stay in those columns. A trailing bullet belongs to the second column—it is <strong>not</strong> inferred to be a closing line. Use <code>@footer</code> for a visible closer. <code>@polarity</code> on its own line colors left rust and right olive when the author intends the closed/open comparison.</p>
+<h3>Quote and big statement</h3>
+<pre><code class="language-markdown">## @quote
+Your exact quotation, including only the quotation marks you want displayed.
+@attribution Your verified attribution
+
+## Your brief statement @big
+
+## A definition @big
+Your longer definition in your own words.
+</code></pre>
+<p>Quote body text is mandatory. Attribution is authored, not looked up. <code>@big</code> permits a heading and optional visible body; choose a short heading when the body carries the meaning.</p>
+<h3>Major sections</h3>
+<pre><code class="language-markdown">## Your major section @part
+
+## A topic within that section
+- Your point.
+</code></pre>
+<p><code>@part</code> is a navy title-only divider. It sets the inherited eyebrow and advances the section accent. Do not put facts under it; start another <code>##</code> slide.</p>
+<h3>Images</h3>
+<pre><code class="language-markdown">## A chapter beat @photo images/harbour.jpg
+@alt A description of the image
+@credit Source, author, license and any required attribution
+
+## A solemn moment @somber &quot;images/photo with spaces.jpg&quot;
+@alt A description of the image
+@credit Your credit line
+
+## A graph @img images/graph.png
+@alt Describe the relationship shown by the graph
+@credit Your credit line
+</code></pre>
+<p><code>@photo</code> crops to fill, light veil. <code>@somber</code> crops to fill, heavy veil. <code>@img</code> shows the entire image without cropping. Image/quote layouts may omit a visible heading, e.g. <code>## @img images/graph.png</code>. There is no automatic image search. Import the image under <strong>Local images</strong> and make the listed path match the notes exactly.</p>
+<p>Use relative <code>/</code> paths. Absolute paths, drive letters, <code>..</code>, URLs, scriptable SVG/HTML, query strings, fragments and encoded paths are rejected. PNG/JPEG/GIF/WebP only. Spaces in directive paths need quotes. For widest portability avoid punctuation in filenames. Case matters when you later host the output.</p>
+<h3>Paired portraits</h3>
+<pre><code class="language-markdown">## Two people @duo
+@portrait images/one.jpg | Person One | Source and license | Portrait of Person One
+@portrait images/two.jpg | Person Two | Source and license | Portrait of Person Two
+</code></pre>
+<p>Order is <strong>path | name | credit | alt</strong>. Use exactly two directives. No names, photos or biographies are inferred. The full portraits are contained within their frames.</p>
+<h3>Scholar citation</h3>
+<pre><code class="language-markdown">## An authored reference @scholar images/portrait.jpg
+@alt Portrait description
+@citation Your verified bibliographic citation
+@takeaway Your exact takeaway
+@credit Image source and license
+</code></pre>
+<p>This is layout only: it does not query Crossref or verify a citation. Bibliography and takeaway come from the notes.</p>
+<h3>Open/closed axis and explicit meters</h3>
+<pre><code class="language-markdown">## The thematic spectrum @lens
+
+## An era
+- Your short fact.
+@slider 78%
+
+## Two policy dimensions
+- Your short fact.
+@slider1 Immigration at 90%
+@slider2 Trade at 10%
+</code></pre>
+<p><code>@lens</code> draws an unscored closed/open axis. <code>@slider</code> draws a single marker. Named <code>@slider1</code>/<code>@slider2</code> preserve their written order. Percentages are 0–100, with decimals allowed. They are author-supplied values, never computed from the lecture's subject. Do not combine single and dual meters unless you genuinely want all the annotated meters on one slide.</p>
+<h2>Common per-slide directives</h2>
+<table>
+<thead>
+<tr>
+<th>Directive, on its own line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@eyebrow Your label</code></td>
+<td>Override inherited small label</td>
+</tr>
+<tr>
+<td><code>@hue olive</code></td>
+<td>Pin accent: olive, violet, rust, amber</td>
+</tr>
+<tr>
+<td><code>@footer Your question?</code></td>
+<td>Visible italic bottom line</td>
+</tr>
+<tr>
+<td><code>@norev</code> or <code>@flash</code></td>
+<td>Show all facts at once</td>
+</tr>
+<tr>
+<td><code>@notes Your explanation</code></td>
+<td>Private note</td>
+</tr>
+<tr>
+<td><code>@alt Your description</code></td>
+<td>Image alternative text</td>
+</tr>
+<tr>
+<td><code>@credit Your source/license</code></td>
+<td>Visible image credit</td>
+</tr>
+<tr>
+<td><code>@attribution Your attribution</code></td>
+<td>Visible quote attribution</td>
+</tr>
+<tr>
+<td><code>@citation Your citation</code></td>
+<td>Visible citation text</td>
+</tr>
+<tr>
+<td><code>@takeaway Your takeaway</code></td>
+<td>Visible takeaway panel</td>
+</tr>
+<tr>
+<td><code>@polarity</code></td>
+<td>Rust-left, olive-right column accents</td>
+</tr>
+</tbody>
+</table>
+<p>The cover accepts only its title, optional <code>@eyebrow</code>, and private notes. Metadata other than layout flags and <code>@norev</code>/<code>@flash</code> belongs on its own line. Duplicate metadata directives are errors rather than silent overwrites.</p>
+<h2>Diagnostics and fit</h2>
+<p>Errors identify a source line and block export. Click a message in Studio to move to its lecture and line. Long titles and dense slides produce warnings, without deleting words. Before a browser export, Studio renders <strong>every available lecture</strong> offscreen, tests image decoding, and checks actual slide overflow at the design canvas size. It automatically reduces font sizes within a bounded range; remaining overflow blocks export. Fix by splitting the notes into additional <code>##</code> slides, not by suppressing the warning.</p>
+<p>Unavailable (coming-soon) lectures remain in the private project but their content is not exported. Only their library labels appear to students.</p>
+<h2>Migrating older human-assisted shorthand</h2>
+<p>The old template sometimes included instructions and sample notes under extra <code>#</code> headings. Start at the real lecture title; keep one cover only. Remove instructional prose or put it in comments/private notes.</p>
+<p>Replace guessed/indented two-column arrangements with two named <code>###</code> groups. Replace a guessed trailing closer with <code>@footer</code>. Replace image-search ideas such as <code>@photo a harbour</code> with a real imported image path. Replace scholar lookups with your own citation and portrait. There is no automatic conversion from an arbitrary PDF, PowerPoint, or Word document in this release.</p>
+<h3>Converting older chartroom HTML decks (v1.2)</h3>
+<p>Hand-authored chartroom <strong>HTML</strong> decks can be converted automatically, not by retyping. Run the development tool:</p>
+<pre><code class="language-bash">python scripts/convert-old-deck.py &quot;path/to/deck.html&quot; \
+  --out &quot;path/to/deck-notes.md&quot; \
+  --project &quot;path/to/deck.chartroom.json&quot; \
+  --palette buster --id my-lecture
+</code></pre>
+<p>It reads the <code>.s</code>-section markup the old decks used (covers, editorial rails,
+chapter-beat photos, whole-image exhibits, two-column halves, pull quotes,
+scholar citations, question pairs, era lists, card grids, matrices, navy
+interludes) and emits v1 annotated notes. The mapping is deterministic and
+summarized below; wording is preserved verbatim and nothing is invented.
+Keep the input deck and converted outputs outside the source repository.
+Images stay in the deck's own <code>images/</code> folder; <code>--project</code>
+embeds them into a ready-to-open <code>.chartroom.json</code> with your chosen palette, and
+<code>--id</code> sets the lecture slug. The original deck is never modified.</p>
+<p>Known, explicit mappings: running part labels become the eyebrow when a slide
+has no authored eyebrow; heading-less two-column halves and Rogowski-style
+tables are flattened to facts (with a private note explaining how to restore
+the layout); <code>.open</code>/<code>.closed</code> emphasis and <code>&lt;strong&gt;</code> become bold; <code>&lt;em&gt;</code>
+becomes plain text. Quote glyphs, dot markers and accent bars are design chrome
+and are removed. No wording is invented, deduplicated, or shortened.</p>
+</body></html>

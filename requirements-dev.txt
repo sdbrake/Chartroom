@@ -1,0 +1,2 @@
+# Developer handbook generator only. The app needs no Python packages.
+Markdown>=3.6,<4

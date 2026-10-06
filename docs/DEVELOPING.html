@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Developing Chartroom Studio</title><style>body{max-width:960px;margin:0 auto;padding:36px 26px 90px;background:#f2efe9;color:#1f2933;font:18px/1.65 Arial,sans-serif}h1,h2,h3{font-family:Georgia,serif;font-weight:400;line-height:1.2}h1{font-size:46px}h2{font-size:32px;margin-top:46px}a{color:#245d45}a:focus-visible{outline:3px solid #4a6fa5}pre{background:#182030;color:#f2efe9;padding:22px;overflow:auto;font:15px/1.6 Consolas,monospace}code{font-family:Consolas,monospace}table{border-collapse:collapse;width:100%;font-size:16px}td,th{padding:12px;text-align:left;border-bottom:1px solid #c2c1b8}th{background:#e6e2d9}nav{font-size:15px;border-bottom:2px solid #b07d2b;padding-bottom:18px}li{margin-bottom:9px}@media(max-width:600px){body{font-size:16px;padding:20px}h1{font-size:34px}table{display:block;overflow:auto}}</style></head><body><nav><a href="../START HERE.html">Start here</a> · <a href="../index.html">Open Studio</a> · <a href="RULES.html">Rules</a> · <a href="ANNOTATIONS.html">Annotations</a></nav>
+<h1>Developing Chartroom Studio</h1>
+<p>This repository is the canonical working source for Chartroom Studio 1.3. Make future changes here, not in an extracted offline distribution or an older fallback copy. Keep personal projects and teaching material outside the repository.</p>
+<p>Opening <code>index.html</code> in a browser requires no installation. The tools below are for contributors who run tests, convert older decks, or build releases.</p>
+<h2>Set up the development tools</h2>
+<p>Use Node.js 22 or later and Python 3. Run these commands from the repository root:</p>
+<pre><code class="language-bash">npm ci
+npx playwright install chromium
+python -m pip install -r requirements-dev.txt
+</code></pre>
+<p>Tests normally use the Chromium installed by Playwright. Set the <code>BROWSER_PATH</code> environment variable to use an existing compatible Chrome or Edge executable instead. <code>PLAYWRIGHT_PATH</code> and <code>PYTHON</code> can also override the test tooling when needed.</p>
+<p>The browser app uses local classic scripts and styles. It has no runtime package installation or build step.</p>
+<h2>Source layout</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/parser.js</code></td>
+<td>Annotation grammar, model, and source-line diagnostics</td>
+</tr>
+<tr>
+<td><code>src/renderer.js</code></td>
+<td>Slide layouts, palettes, teaching player, and review library</td>
+</tr>
+<tr>
+<td><code>src/package.js</code></td>
+<td>Project validation, image/path checks, and export ZIPs</td>
+</tr>
+<tr>
+<td><code>src/preflight.js</code></td>
+<td>Browser image decoding and slide-overflow checks</td>
+</tr>
+<tr>
+<td><code>src/insert.js</code></td>
+<td>Editor insertion templates and placement rules</td>
+</tr>
+<tr>
+<td><code>src/presenter.js</code>, <code>src/presenter.css</code></td>
+<td>In-app teaching presentation and exit behavior</td>
+</tr>
+<tr>
+<td><code>src/app.js</code>, <code>src/studio.css</code>, <code>index.html</code></td>
+<td>Studio editor and browser storage</td>
+</tr>
+<tr>
+<td><code>tests/</code>, <code>scripts/test.cjs</code></td>
+<td>Automated checks and test runner</td>
+</tr>
+<tr>
+<td><code>public-files.json</code></td>
+<td>Exact file lists for public distributions</td>
+</tr>
+<tr>
+<td><code>scripts/build-handbook.py</code></td>
+<td>Generated HTML handbook</td>
+</tr>
+<tr>
+<td><code>scripts/build-release.py</code>, <code>scripts/check-release.py</code></td>
+<td>Release packaging and archive checks</td>
+</tr>
+</tbody>
+</table>
+<p><code>CONTRACT.md</code> at the repository root defines module interfaces. The <a href="RULES.html">rules</a> and <a href="ANNOTATIONS.html">annotation reference</a> define author-facing behavior. Keep these in step with the code.</p>
+<h2>Change and test</h2>
+<ol>
+<li>Add a failing regression test for the behavior you are changing. Use synthetic fixtures and public examples, not private lecture archives.</li>
+<li>Update source modules without silently changing existing annotation meanings. Preserve authored wording, image paths, slide order, private-note removal, and teaching/review differences.</li>
+<li>Update the Markdown guides and examples. Edit the source guides, not generated handbook HTML.</li>
+<li>Run the full suite and hosted-mode checks:</li>
+</ol>
+<pre><code class="language-bash">npm test
+npm run check-hosted
+</code></pre>
+<p>Hosted-mode tests run against local HTTP hosting. They do not deploy to GitHub or verify a live Pages address. Do not report a test as passing unless you ran it on the current files.</p>
+<p>For presentation changes, check keyboard navigation, rejected-fullscreen fallback, focus restoration, and Escape returning to the private editor. For parser, renderer, or packaging changes, check that public HTML and ZIPs contain neither private annotations nor embedded project source.</p>
+<h2>Build and check distributions</h2>
+<p>After the current tests pass:</p>
+<pre><code class="language-bash">npm run docs
+npm run release
+npm run check-release
+</code></pre>
+<p>The release builder uses <code>public-files.json</code> rather than copying the working directory. Its verification gate checks that the runtime matches the latest test evidence. Rerun tests after runtime changes instead of bypassing that gate.</p>
+<p>The generated outputs have different uses:</p>
+<ul>
+<li><code>downloads/Chartroom-Studio-Offline.zip</code>: the app and user documentation for local use without developer tools.</li>
+<li><code>dist/Chartroom-Studio-GitHub.zip</code>: the clean public source repository, including the offline download for the hosted app.</li>
+</ul>
+<p>Private lectures, test-run artifacts, temporary files, <code>node_modules</code>, and generated verification reports do not belong in either distribution. Review the exact manifest lists when adding a public asset or guide. Release checks must cover both extracted ZIPs, not just the source folder.</p>
+<p>Update <a href="VERIFICATION.html">VERIFICATION.md</a> with real commands, environments, results, and remaining limitations. Regenerate the handbook and rebuild/recheck archives after final documentation changes so shipped guides match the source. The internal machine-generated verification report is test evidence, not a public download.</p>
+<p>Publishing remains manual. Follow <code>GITHUB.md</code> at the repository root; no build command should push or deploy. <code>.gitignore</code> is not a safety filter for arbitrary web uploads.</p>
+<h2>Convert an older Chartroom deck</h2>
+<p>The command-line converter accepts supported older Chartroom HTML markup, not arbitrary presentations. See the <a href="ANNOTATIONS.html">annotation reference</a> for its command, mappings, and limitations. Keep input decks, converted notes, projects, and images outside the repository. Inspect the converted notes and run Studio's browser checks before sharing an export.</p>
+<h2>Storage and portability</h2>
+<p>A <code>.chartroom.json</code> file is private authoring data, not an app source file. <strong>Save project</strong> writes the portable backup; browser <code>localStorage</code> is only a draft cache. Moving to a different origin, browser profile, or local file location may make that cache unavailable. Use <strong>Save project</strong> in the old app and <strong>Open project</strong> in the new one.</p>
+<p>Do not add cloud sync, external assets, or network-dependent runtime behavior without explicitly reviewing the privacy and offline-use contract. The hosted app needs a connection to load again; it has no service worker guaranteeing offline reload.</p>
+</body></html>

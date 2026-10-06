@@ -1,0 +1,20 @@
+{
+  "name": "chartroom-studio",
+  "version": "1.3.0",
+  "private": true,
+  "description": "Slideshow generator and converter.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node scripts/test.cjs",
+    "docs": "python scripts/build-handbook.py",
+    "release": "python scripts/build-release.py",
+    "check-release": "python scripts/check-release.py && node tests/release-browser.test.cjs",
+    "check-hosted": "node tests/hosted.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
