@@ -87,16 +87,27 @@
   function assetUrls(id) {
     return Object.fromEntries(project.assets.filter(a=>a.lectureId===id).map(a=>[a.path,`data:${a.mime};base64,${a.data}`]));
   }
-  let previousPreviewHTML = '';
-  function setPreview(html) {
+  let previousPreviewHTML = '', previewLecture = null, previewIndex = 0, previewStep = 0;
+  let previewGeneration = 0, deckPreview = false;
+  function setPreview(html, isDeck = false) {
     // Keep slide position when a save, reorder or metadata edit leaves the
     // generated deck unchanged. Avoid unnecessary iframe work while writing.
     if (html === previousPreviewHTML) return;
     previousPreviewHTML = html;
+    deckPreview = isDeck;
+    previewGeneration++;
+    // Seed the new player before its first paint; the opaque sandbox cannot
+    // use localStorage. A generation ID rejects messages from an old rebuild.
+    if (isDeck) html = html.replace('<body ',`<body data-preview-id="${previewGeneration}" data-preview-index="${previewIndex}" data-preview-step="${previewStep}" `);
     $('preview-count').textContent='—';$('preview').srcdoc=html;
   }
   function rebuild() {
     clearTimeout(timer);readFields();drawList();
+    // Object identity also distinguishes opened projects that reuse lecture IDs.
+    if (previewLecture !== lecture()) {
+      previewLecture = lecture();previewIndex = 0;previewStep = 0;
+      previousPreviewHTML = '';
+    }
     try {
       const validated=P.validateProject(project), compiled=P.compile(validated), active=Parser.parse(lecture().notes);
       const ownAssets=new Set(project.assets.filter(a=>a.lectureId===lecture().id).map(a=>a.path));
@@ -125,7 +136,7 @@
         const maps=Object.fromEntries(project.lectures.map(l=>[l.id,assetUrls(l.id)]));
         setPreview(R.renderLibrary({...project.course,lectures:compiled.lectures},{assetUrls:maps}));
       }else if(!active.diagnostics.some(d=>d.severity==='error') && !ownMissing.length){
-        setPreview(R.renderDeck(active,{mode:$('preview-mode').value,palette:project.course.palette,assetUrls:assetUrls(lecture().id),deckId:lecture().id}));
+        setPreview(R.renderDeck(active,{mode:$('preview-mode').value,palette:project.course.palette,assetUrls:assetUrls(lecture().id),deckId:lecture().id}),true);
       }else{
         setPreview('<!doctype html><html lang="en"><meta charset="utf-8"><body style="background:#f2efe9;color:#1f2933;font:18px Georgia;padding:30px"><h2>Fix the annotations to preview.</h2><p>Use the line-numbered messages below. No content has been rewritten.</p></body></html>');
       }
@@ -138,7 +149,8 @@
   window.addEventListener('message',event=>{
     if(event.source!==$('preview').contentWindow || event.origin!=='null')return;
     const state=event.data;
-    if(state?.type==='chartroom-state' && Number.isInteger(state.index) && Number.isInteger(state.count) && state.index>=0 && state.index<state.count && state.count<=10000){
+    if(deckPreview && state?.previewId===String(previewGeneration) && state.type==='chartroom-state' && Number.isInteger(state.index) && Number.isInteger(state.count) && state.index>=0 && state.index<state.count && state.count<=10000 && Number.isInteger(state.step) && state.step>=0 && state.step<=10000){
+      previewIndex=state.index;previewStep=state.step;
       $('preview-count').textContent=`${state.index+1} / ${state.count}`;
     }
   });

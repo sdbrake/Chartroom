@@ -1,6 +1,16 @@
 # Verification status
 
-## Chartroom Studio 1.3
+## Preview-position fix (2026-10-20)
+
+The slide preview now retains its current slide and teaching reveal step when edits rebuild the same lecture. Palette/mode changes retain the slide; temporary invalid annotations preserve the last good position. Removing the current final slide clamps the position to the remaining deck. Selecting another lecture or opening/replacing a project starts at the beginning. Preview-only state is not added to exported decks, and the iframe remains sandboxed with `allow-scripts` only.
+
+- The new real-browser regression failed before the fix: editing the second slide displayed the cover. It now passes in installed Chrome and Edge.
+- The latest full `npm test` passed all 23 stages in Chrome 155.0.8059.85: 79 core/player tests and 5 converter tests passed with no failures or skips, along with all browser integration and public-packaging checks.
+- The first full run timed out in the existing presentation-navigation test. That test passed in isolation and the complete rerun passed without changing the test or presentation code. The first-run log/report are retained locally as `tests/artifacts/preview-fix-chrome-first-run.*`; the cause of that transient timeout was not established.
+- The updated allowlist contains 87 repository ZIP members (including the offline download) and 46 offline ZIP members. Use the release checks below to verify rebuilt archives against current source bytes and exercise their extracted applications.
+- Nothing has been pushed or deployed. The old offline fallback folder is unchanged; the maintained copy is the publication-staging source.
+
+## Original Chartroom Studio 1.3 release checks (2026-10-06)
 
 Verified locally on 2026-10-06 on Windows. Nothing has been pushed or deployed to GitHub Pages; a live site remains to be checked after the owner publishes it.
 

@@ -11,7 +11,7 @@ const steps=[
  ['node',['tests/convert-old-deck.test.cjs']],
  ['node',['scripts/build-demo.cjs']],
  ['node',['scripts/build-palette-samples.cjs']],
- ...['studio','imports','preflight','recovery','palettes-ui','insert-ui','presentation','presentation-boundaries','presentation-portable'].map(s=>['node',['tests/'+s+'.test.cjs']]),
+ ...['studio','preview-position','imports','preflight','recovery','palettes-ui','insert-ui','presentation','presentation-boundaries','presentation-portable'].map(s=>['node',['tests/'+s+'.test.cjs']]),
  [env.PYTHON||'python',['scripts/check-exports.py']],
  ['node',['tests/exports.test.cjs']],
  ['node',['tests/palettes-exports.test.cjs']],

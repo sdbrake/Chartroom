@@ -132,7 +132,7 @@ ${library ? `
     // Chromium reports file:// in ancestorOrigins but serializes message origins as null.
     if (parentOrigin === 'file://') parentOrigin = 'null';
     const images=Array.from(document.images);
-    const post = type => {if (parent !== window) parent.postMessage({type,...getState(),resourcesReady:images.every(img=>img.complete),failedImages:images.filter(img=>img.complete && !img.naturalWidth).length},parentOrigin === 'null' ? '*' : parentOrigin);};
+    const post = type => {if (parent !== window) parent.postMessage({type,...getState(),previewId:document.body.dataset.previewId,resourcesReady:images.every(img=>img.complete),failedImages:images.filter(img=>img.complete && !img.naturalWidth).length},parentOrigin === 'null' ? '*' : parentOrigin);};
     window.addEventListener('message',event=>{
       if(parent === window || event.source !== parent || event.origin !== parentOrigin || !event.data || event.data.type !== 'chartroom-command')return;
       const actions={next,previous,home,end,go:()=>go(event.data.index),state:()=>post('chartroom-state'),escape:()=>post('chartroom-escape')};
@@ -146,6 +146,13 @@ ${library ? `
           index=clamp(saved.index,0,slides.length-1);step=clamp(saved.step,0,max(index));
         }
       } catch (_) { /* Local-file privacy settings and corrupt saves are harmless. */ }
+    }
+    // Studio supplies an ephemeral position for rebuilt previews only. Exported
+    // decks keep their existing content-keyed storage and review-start behavior.
+    const previewIndex = Number(document.body.dataset.previewIndex);
+    const previewStep = Number(document.body.dataset.previewStep);
+    if (Number.isInteger(previewIndex) && Number.isInteger(previewStep) && slides.length) {
+      index=clamp(previewIndex,0,slides.length-1);step=clamp(previewStep,0,max(index));
     }
     function show() {
       if (!review) {try {localStorage.setItem(storageKey,JSON.stringify(getState()));} catch (_) {}}

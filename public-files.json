@@ -80,6 +80,7 @@
     "tests/presentation-boundaries.test.cjs",
     "tests/presentation-portable.test.cjs",
     "tests/presentation.test.cjs",
+    "tests/preview-position.test.cjs",
     "tests/public-release.test.py",
     "tests/recovery.test.cjs",
     "tests/release-browser.test.cjs",
