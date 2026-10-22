@@ -25,7 +25,7 @@ This rulebook describes the compiler and renderer shipped with Chartroom Studio 
 | `@photo path` | Full-bleed image, light veil |
 | `@somber path` | Full-bleed image, heavy veil |
 | `@img path` | Whole, uncropped image exhibit |
-| `@lens` | Closed–open thematic axis, no guessed score |
+| `@lens` | Unscored axis; Closed/Open endpoints unless this slide supplies spectrum labels |
 | `@duo` with two portrait directives | Paired whole portraits and captions |
 | `@scholar path` | Portrait with authored citation/takeaway |
 
@@ -100,7 +100,9 @@ These choices preserve the existing slide structure, system fonts, reveal rules 
 
 ## 5. Meters are claims made by the author
 
-No meter unless explicitly annotated. Values must be between 0% and 100%. Closed is rust at the left; open is olive at the right. Labels sit **above** the gradient track. Dual policy meters retain the author's directive order and labels. The software never assigns a historical openness score.
+No meter unless explicitly annotated. Values must be between 0% and 100%. By default, Closed is at the left and Open at the right, using the palette’s warm and cool colors (rust and olive in Classic). Labels sit **above** the gradient track. Dual policy meters retain the author's directive order and labels. The software never assigns a historical openness score.
+
+`@spectrum Left label | Right label`, on its own line, replaces the endpoint text for that slide’s `@lens` axis and all its `@slider`, `@slider1`, and `@slider2` meters. It changes neither the numeric values nor the colors or individual meter names. It does not create a meter or axis by itself. The labels are per-slide: they do not inherit, and there is no global setting. Without the directive, Closed/Open is unchanged. The **Insert an element or tool** menu includes spectrum labels.
 
 ## 6. Teaching and review are different products
 
@@ -116,7 +118,17 @@ The runtime is HTML/CSS/JavaScript. An extracted local copy runs in a modern des
 
 The project is the source of truth. Exports are snapshots. Updating notes does not alter old downloads, another person's files, or a hosted site. Sharing and publication are manual. Export never pushes GitHub or deploys Apps Script.
 
-## 8. Customization and extensions
+## 8. Conversion produces a draft, not a finished lecture
+
+**Convert text / slideshow** opens **Convert to draft notes**. It accepts pasted text or a `.txt`, `.md`, `.pptx`, `.html`, or `.htm` file, with an optional title. Processing stays in the browser, with no uploads, and works in the extracted offline app. Google Slides and Keynote presentations must be exported as `.pptx`; older `.ppt` and PDF are unsupported. Export to `.pptx` or paste text instead.
+
+The draft is editable before **Save draft .md** or **Add as new draft lecture**. Adding creates a separate unavailable (**Coming soon**) lecture, never overwrites the current lecture, and does not make the draft public. Its library label may still appear. Review before making it available.
+
+Conversion approximates headings, list hierarchy, and slide boundaries without rewriting the source wording. It does not import images, charts, animations, or slide layout. This is a separate preparation step, not a relaxation of the annotation compiler’s strict grammar. **Import .md / .txt notes** remains the exact-annotations path. The legacy Python converter remains the fidelity-oriented option for supported older Chartroom HTML.
+
+PPTX speaker notes remain private, and explicit source private annotations are protected. Ambiguous Chartroom syntax may be placed in private notes with a warning for cleanup. Raw text and HTML still require a privacy review: no unmarked prose is inferred to be secret. Saved draft notes, like other source `.md` files, can contain private material and are not public handouts.
+
+## 9. Customization and extensions
 
 The engine is intentionally readable: grammar in `src/parser.js`, layout/CSS/player in `src/renderer.js`, project/ZIP checks in `src/package.js`, real-browser export gate in `src/preflight.js`, workshop UI in `src/app.js` and `src/studio.css`. The parser exposes its core rules as `ChartroomParser.rules`.
 

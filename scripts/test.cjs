@@ -7,11 +7,12 @@ const env={...process.env,TMP:path.join(root,'tests/tmp'),TEMP:path.join(root,'t
 const {chromium}=require(env.PLAYWRIGHT_PATH||'playwright');
 if(!env.BROWSER_PATH)env.BROWSER_PATH=chromium.executablePath();
 const steps=[
- ['node',['--test','tests/parser.test.cjs','tests/package.test.cjs','tests/cli.test.cjs','tests/player.test.cjs','tests/palettes.test.cjs','tests/insert.test.cjs']],
+ ['node',['--test','tests/parser.test.cjs','tests/package.test.cjs','tests/cli.test.cjs','tests/player.test.cjs','tests/palettes.test.cjs','tests/insert.test.cjs','tests/spectrum.test.cjs','tests/converter-structure.test.cjs']],
  ['node',['tests/convert-old-deck.test.cjs']],
+ ['node',['tests/converter.test.cjs']],
  ['node',['scripts/build-demo.cjs']],
  ['node',['scripts/build-palette-samples.cjs']],
- ...['studio','preview-position','imports','preflight','recovery','palettes-ui','insert-ui','presentation','presentation-boundaries','presentation-portable'].map(s=>['node',['tests/'+s+'.test.cjs']]),
+ ...['studio','preview-position','imports','converter-ui','spectrum-ui','preflight','recovery','palettes-ui','insert-ui','presentation','presentation-boundaries','presentation-portable'].map(s=>['node',['tests/'+s+'.test.cjs']]),
  [env.PYTHON||'python',['scripts/check-exports.py']],
  ['node',['tests/exports.test.cjs']],
  ['node',['tests/palettes-exports.test.cjs']],

@@ -3,13 +3,14 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
 const root=path.resolve(__dirname,'..'),offline=path.join(root,'tests/tmp/release-offline'),repository=path.join(root,'tests/tmp/release-repository');
 assert.ok(fs.existsSync(path.join(offline,'index.html')),'Run scripts/check-release.py to extract both ZIPs first.');
-const hosted=spawnSync(process.execPath,[path.join(__dirname,'hosted.test.cjs')],{cwd:root,env:{...process.env,APP_ROOT:repository,CHECK_OFFLINE_DOWNLOAD:'1'},stdio:'inherit'});
+const hosted=spawnSync(process.execPath,[path.join(__dirname,'hosted.test.cjs')],{cwd:root,env:{...process.env,APP_ROOT:repository,CHECK_OFFLINE_DOWNLOAD:'1'},stdio:'inherit',timeout:60000});
 assert.equal(hosted.status,0,'Actual extracted GitHub ZIP passes hosted subdirectory checks and its download works.');
 process.env.TMP=process.env.TEMP=path.join(root,'tests/tmp');
 (async()=>{
  const b=await chromium.launch({headless:true,executablePath:process.env.BROWSER_PATH||chromium.executablePath()});
  try{
   const c=await b.newContext({offline:true,acceptDownloads:true,viewport:{width:1600,height:1000}}),p=await c.newPage(),errors=[],requests=[];
+  p.setDefaultTimeout(15000);
   p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{const u=r.url();if(/^https?:/.test(u)||(u.startsWith('file:')&&!path.resolve(fileURLToPath(u)).startsWith(path.resolve(offline)+path.sep)))requests.push(u);});p.on('dialog',d=>d.accept());
   await p.goto(pathToFileURL(path.join(offline,'index.html')).href);assert.equal(await p.locator('.brand p').textContent(),'Slideshow generator and converter.');assert.equal(await p.locator('#offline-download').isVisible(),false);
   await p.locator('#open-project-input').setInputFiles(path.join(offline,'examples/demo.chartroom.json'));await p.waitForFunction(()=>document.querySelector('#notes').value.includes('Chartroom workshop'));

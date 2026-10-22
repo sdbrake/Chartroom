@@ -1,5 +1,19 @@
 # Verification status
 
+## Editable spectrum labels and draft conversion (2026-10-21)
+
+The maintained source now supports per-slide `@spectrum Left label | Right label`, including lens axes and meters. The separate **Convert text / slideshow** window creates reviewable draft notes from pasted text and UTF-8 `.txt`, `.md`, `.html`/`.htm`, or `.pptx` files. It preserves the current lecture and adds converted lectures as unavailable until reviewed.
+
+- Latest full `npm test`: **26 stages passed**, including 96 core/player/spectrum/outline tests, 5 legacy-converter tests, and 39 draft-converter tests, with no failures or skips. Runtime hashes match the tested source.
+- Real browser feature workflows passed in **Chrome 156.0.8078.47** and **Edge 155.0.4283.62**: custom label fit, lens and meter preview, save/autosave, both public spectrum exports, draft editing and download, a real PPTX fixture, new-lecture preservation, pending-editor work, unsupported-file recovery, strict UTF-8 rejection, and teaching export.
+- Privacy and input regressions include private multiline headings, hidden HTML ancestors, inert HTML without script execution/resource fetching, private PPTX speaker notes, malformed archives/XML, bounded expansion and adversarial bracket scans. Independent follow-up review passed the hidden-ancestor, raw-outline, multiline HTML privacy, and shared file-ingestion checks.
+- Both new feature tests also passed against the actual **extracted offline archive** with network disabled and the actual **extracted repository archive served under a local HTTP subdirectory**.
+- Both distributions were rebuilt from the reviewed allowlist: **47 offline ZIP members** and **94 repository ZIP members**, including its offline download. Archive CRCs, exact source bytes and local HTML links passed. The extracted-app browser check passed project reopen/images, presentation/navigation/exit, project/teaching/student downloads, hosted download, and absence of unintended network/original-folder requests or JavaScript errors.
+- Combined release-check commands intermittently reached their outer tool timeouts after hosted checks passed. Standalone browser reruns and an instrumented combined check passed. The release browser test now has explicit operation and hosted-child timeouts rather than allowing indefinite waits; the original timing failure's cause was not established. The API diagnostic log remains local in `tests/artifacts/release-browser-debug.log` and is not shipped.
+- Nothing has been pushed or deployed. The old offline fallback folder is unchanged. A live GitHub Pages deployment and classroom/projector use remain unverified.
+
+**Conversion limits:** output is a starting draft, not slide reconstruction. Plain-text heading guesses need review. PPTX uses XML reading order; master/layout text, charts, embedded objects, images and animations are not imported, and tables become text rows. Older `.ppt` and PDF are unsupported. Ambiguous annotation syntax is retained in private notes with warnings, not silently published. Unmarked prose cannot be recognized as secret automatically.
+
 ## Preview-position fix (2026-10-20)
 
 The slide preview now retains its current slide and teaching reveal step when edits rebuild the same lecture. Palette/mode changes retain the slide; temporary invalid annotations preserve the last good position. Removing the current final slide clamps the position to the remaining deck. Selecting another lecture or opening/replacing a project starts at the beginning. Preview-only state is not added to exported decks, and the iframe remains sandboxed with `allow-scripts` only.

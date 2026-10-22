@@ -6,9 +6,9 @@ This is a deliberately small Markdown-like language, **not all of Markdown**. Wr
 
 You do not need to type these directives from memory. Below the editor, choose **Insert an element or tool** to see grouped choices, a plain-language explanation and the exact annotation that will be inserted. Put the cursor inside the intended slide and click **Insert element**. The snippet goes below that line (or on a blank line), with its first editable placeholder selected. Bold wraps selected words; all other elements require an unselected cursor and preserve your prose.
 
-The menu covers bullets/cards, nested details, paragraphs, bold, private notes/comments, labels, footers, citations, takeaways, meters, image descriptions/credits, reveal settings, column polarity and accent colors. Duplicate metadata and incompatible placements are refused with guidance instead of silently overwriting your notes. Replace sample labels, percentages and sources yourself. Image files still need importing under **Local images**.
+The menu covers bullets/cards, nested details, paragraphs, bold, private notes/comments, labels, footers, citations, takeaways, meters, spectrum labels, image descriptions/credits, reveal settings, column polarity and accent colors. Duplicate metadata and incompatible placements are refused with guidance instead of silently overwriting your notes. Replace sample labels, percentages and sources yourself. Image files still need importing under **Local images**.
 
-Full layouts, including paired portraits, scholar citations and the thematic axis, belong in the adjacent **Insert slide** menu. The compiler syntax below is unchanged.
+Full layouts, including paired portraits, scholar citations and the thematic axis, belong in the adjacent **Insert slide** menu. The menu inserts the annotation syntax described below.
 
 ## A minimal lecture
 
@@ -134,7 +134,7 @@ Order is **path | name | credit | alt**. Use exactly two directives. No names, p
 
 This is layout only: it does not query Crossref or verify a citation. Bibliography and takeaway come from the notes.
 
-### Open/closed axis and explicit meters
+### Spectrum labels, axis, and explicit meters
 
 ```markdown
 ## The thematic spectrum @lens
@@ -149,7 +149,21 @@ This is layout only: it does not query Crossref or verify a citation. Bibliograp
 @slider2 Trade at 10%
 ```
 
-`@lens` draws an unscored closed/open axis. `@slider` draws a single marker. Named `@slider1`/`@slider2` preserve their written order. Percentages are 0–100, with decimals allowed. They are author-supplied values, never computed from the lecture's subject. Do not combine single and dual meters unless you genuinely want all the annotated meters on one slide.
+`@lens` draws an unscored axis with Closed on the left and Open on the right by default. `@slider` draws a single marker. Named `@slider1`/`@slider2` preserve their written order. Percentages are 0–100, with decimals allowed. They are author-supplied values, never computed from the lecture's subject. Do not combine single and dual meters unless you genuinely want all the annotated meters on one slide.
+
+To change the endpoint text, put `@spectrum Left label | Right label` on its own line within the slide. For example:
+
+```markdown
+## A comparison axis @lens
+@spectrum Centralized | Decentralized
+
+## An authored estimate
+- Your explanation of the measure.
+@spectrum Centralized | Decentralized
+@slider 35%
+```
+
+Both labels are authored text, separated by `|`. The directive changes the endpoints of the `@lens` axis and every `@slider`, `@slider1`, or `@slider2` meter on **that slide only**. It does not add an axis or meter by itself, change a numeric value, rename an individual meter, or change the palette’s colors. There is no global spectrum-label setting and no inheritance to the next slide: without the directive, Closed/Open remains the default. Repeat it on each slide that needs custom labels. **Insert an element or tool** includes spectrum labels so you do not need to remember the syntax.
 
 ## Common per-slide directives
 
@@ -166,6 +180,7 @@ This is layout only: it does not query Crossref or verify a citation. Bibliograp
 | `@citation Your citation` | Visible citation text |
 | `@takeaway Your takeaway` | Visible takeaway panel |
 | `@polarity` | Rust-left, olive-right column accents |
+| `@spectrum …` | Two endpoint labels for this slide’s axis and meters, separated by a vertical bar; default Closed/Open |
 
 The cover accepts only its title, optional `@eyebrow`, and private notes. Metadata other than layout flags and `@norev`/`@flash` belongs on its own line. Duplicate metadata directives are errors rather than silent overwrites.
 
@@ -179,11 +194,28 @@ Unavailable (coming-soon) lectures remain in the private project but their conte
 
 The old template sometimes included instructions and sample notes under extra `#` headings. Start at the real lecture title; keep one cover only. Remove instructional prose or put it in comments/private notes.
 
-Replace guessed/indented two-column arrangements with two named `###` groups. Replace a guessed trailing closer with `@footer`. Replace image-search ideas such as `@photo a harbour` with a real imported image path. Replace scholar lookups with your own citation and portrait. There is no automatic conversion from an arbitrary PDF, PowerPoint, or Word document in this release.
+Replace guessed/indented two-column arrangements with two named `###` groups. Replace a guessed trailing closer with `@footer`. Replace image-search ideas such as `@photo a harbour` with a real imported image path. Replace scholar lookups with your own citation and portrait. For ordinary text, PPTX, or HTML, the browser converter below offers a draft for review, not an exact reconstruction. PDF, older `.ppt`, and Word documents are not supported inputs.
 
-### Converting older chartroom HTML decks (v1.2)
+## Convert ordinary text or slides to a draft
 
-Hand-authored chartroom **HTML** decks can be converted automatically, not by retyping. Run the development tool:
+Use **Import .md / .txt notes** for existing Chartroom annotation files: that is the exact-annotations path. Use **Convert text / slideshow** in the sidebar when starting from ordinary text or a slideshow. Its **Convert to draft notes** window keeps conversion separate from the current lecture.
+
+1. Paste text or select one `.txt`, `.md`, `.pptx`, `.html`, or `.htm` file. You may supply a title, but it is optional. Export a Google Slides or Keynote presentation as `.pptx` first; native files, older `.ppt`, and PDF are not supported. For unsupported presentations, export to `.pptx` or paste the text.
+2. Review and edit the resulting draft. Headings, list hierarchy, and slide boundaries are approximate; wording is not rewritten. Images, charts, animations, and slide layout are not imported. Rebuild the needed layouts and add local images yourself.
+3. Use **Save draft .md** to download the editable annotated source, including any private notes. Or choose **Add as new draft lecture**. The added lecture is unavailable (**Coming soon**) by default; existing lectures are not overwritten.
+4. Check warnings, annotations, visible text, and preview before making the new lecture available. Unavailable lecture content is excluded from public exports, but its library label can still appear.
+
+Everything is processed in your browser, without uploads. Conversion also works in the extracted offline app; it does not need Python. The original source file is not changed.
+
+### Privacy during conversion
+
+PPTX speaker notes are private notes, not slide text. Explicit source private annotations are protected. Ambiguous Chartroom syntax may be kept in private notes with a warning for cleanup; check those warnings against the original rather than copying all private notes into visible text.
+
+Raw text and HTML need a privacy review. The converter cannot infer that an unmarked answer, reminder, or other prose is secret. Mark it explicitly before sharing. Draft `.md` files and saved projects can contain private material: share reviewed teaching or student exports instead.
+
+### Legacy conversion of older Chartroom HTML decks
+
+For supported hand-authored Chartroom **HTML** decks, the source repository retains a separate, fidelity-oriented Python converter. Unlike the browser draft converter, it maps known older layouts and can package their local images. Run the development tool:
 
 ```bash
 python scripts/convert-old-deck.py "path/to/deck.html" \

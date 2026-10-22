@@ -75,9 +75,28 @@ Update [VERIFICATION.md](../VERIFICATION.md) with real commands, environments, r
 
 Publishing remains manual. Follow `GITHUB.md` at the repository root; no build command should push or deploy. `.gitignore` is not a safety filter for arbitrary web uploads.
 
-## Convert an older Chartroom deck
+## Spectrum labels and draft conversion
 
-The command-line converter accepts supported older Chartroom HTML markup, not arbitrary presentations. See the [annotation reference](ANNOTATIONS.md) for its command, mappings, and limitations. Keep input decks, converted notes, projects, and images outside the repository. Inspect the converted notes and run Studio's browser checks before sharing an export.
+`@spectrum Left label | Right label` is slide-local metadata, exposed through **Insert an element or tool**. Apply it to the slide’s `@lens` axis and every `@slider`, `@slider1`, and `@slider2` meter, without altering values, meter names, or colors. Preserve Closed/Open when absent; do not introduce inheritance or a course-wide setting. Keep the parser, renderer, insertion rules, privacy handling, preview, and both exports consistent.
+
+The sidebar’s **Convert text / slideshow** opens the **Convert to draft notes** modal. It accepts pasted text or `.txt`, `.md`, `.pptx`, `.html`, and `.htm` files, plus an optional title. The result is an editable draft with **Save draft .md** and **Add as new draft lecture** actions. Adding must create a separate lecture with `available:false` (**Coming soon**), not overwrite the selected lecture or publish the result. A library label can still appear for an unavailable lecture.
+
+Keep this browser-local and usable in the extracted offline app: no uploads, remote conversion service, or runtime network dependency. Conversion approximates headings, lists, and slide boundaries without rewriting wording. Images, charts, animations, and layout are outside its import scope. Google Slides/Keynote inputs require `.pptx` export first. Reject older `.ppt` and PDF with a useful suggestion to export `.pptx` or paste text.
+
+Protect PPTX speaker notes and explicit source private annotations. Ambiguous Chartroom syntax may be retained as private notes with a cleanup warning; never recover it by silently publishing the private payload. Raw text and HTML need author review, because the converter cannot infer that unmarked prose is secret. Imported HTML is input to extract from, not a document to execute. Preserve **Import .md / .txt notes** as the separate exact-annotations path.
+
+For changes in these features, cover the following in the integration checks:
+
+- Default and custom labels on axes, single meters, and named meters; per-slide isolation; unchanged numeric values and palette colors; insertion and public-output privacy.
+- Supported source formats, approximate hierarchy, unchanged wording, malformed/unsupported inputs, and clear warnings for content needing review.
+- PPTX speaker notes, explicit private annotations, and ambiguous syntax kept out of public output; raw text/HTML limitations explained without promising inferred privacy.
+- Edited draft download and new-lecture creation, unavailable-by-default status, preservation of existing lectures, and operation in local-file and hosted modes without conversion uploads.
+
+These are verification requirements, not a report of checks already run. Record actual results in [VERIFICATION.md](../VERIFICATION.md) after integration; regenerate the handbook and distributions only after the final source and documentation updates.
+
+## Legacy conversion of an older Chartroom deck
+
+The fidelity-oriented Python command-line converter accepts supported older Chartroom HTML markup, not arbitrary presentations. It is separate from the browser draft converter and can map known older layouts and package local images. See the [annotation reference](ANNOTATIONS.md) for its command, mappings, and limitations. Keep input decks, converted notes, projects, and images outside the repository. Inspect the converted notes and run Studio's browser checks before sharing an export.
 
 ## Storage and portability
 

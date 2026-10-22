@@ -6,10 +6,11 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
+  // spectrum is null (Closed/Open defaults) or this slide's {left,right} endpoints.
   function newSlide(title, line, kind) {
     return {kind:kind || 'divider', title, line, eyebrow:'', hue:'olive', reveal:false,
       items:[], body:[], columns:[], footer:'', notes:[], image:'', alt:'', credit:'',
-      attribution:'', meters:[], portraits:[], citation:'', takeaway:'', polarity:false};
+      attribution:'', meters:[], spectrum:null, portraits:[], citation:'', takeaway:'', polarity:false};
   }
 
   const rules = Object.freeze([
@@ -134,6 +135,13 @@
         else if (meta[name]) diagnostic('DUPLICATE_DIRECTIVE', line, '@' + name + ' may appear once per slide.');
         else if (name === 'hue' && !['olive','violet','rust','amber'].includes(argument)) diagnostic('INVALID_HUE', line, 'Hue must be olive, violet, rust, or amber.');
         else { slide[name] = argument; meta[name] = true; }
+      }
+      else if (name === 'spectrum') {
+        if (slide.kind === 'cover' || inHeading) return; // Placement was diagnosed above.
+        const pieces = argument.split('|').map(piece => piece.trim());
+        if (pieces.length !== 2 || pieces.some(piece => !piece)) diagnostic('INVALID_SPECTRUM', line, 'Use @spectrum Left endpoint | Right endpoint with exactly two nonempty labels.');
+        else if (meta[name]) diagnostic('DUPLICATE_DIRECTIVE', line, '@spectrum may appear once per slide.');
+        else { meta[name] = true; slide.spectrum = {left:pieces[0], right:pieces[1]}; }
       }
       else if (name === 'notes') slide.notes.push(argument);
       else if (['slider','slider1','slider2'].includes(name)) {

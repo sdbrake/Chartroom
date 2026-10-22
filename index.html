@@ -28,6 +28,7 @@
     <div class="row"><button id="move-up" title="Move selected lecture earlier">↑ Move</button><button id="move-down" title="Move selected lecture later">↓ Move</button><button id="remove-lecture" title="Remove selected lecture">Remove</button></div>
     <hr>
     <button id="import-notes" class="wide">Import .md / .txt notes</button>
+    <button id="open-converter" class="wide">Convert text / slideshow</button>
     <button id="new-project" class="wide quiet">New blank project</button>
     <button id="load-demo" class="wide quiet">Open demonstration</button>
     <p class="small">Lecture notes and slideshows output separately.<br>Changing the notes updates both on the next export.</p>
@@ -44,7 +45,7 @@
         <label for="notes" class="sr-only">Annotated lecture notes</label>
         <textarea id="notes" spellcheck="false" wrap="off" aria-describedby="notes-help" placeholder="# Your lecture title&#10;&#10;## A slide heading&#10;- Your exact words."></textarea>
         <p id="notes-help" class="small"># cover · ## slide · - point · <code>*aside*</code> stays private</p>
-        <div class="row"><label for="insert-kind" class="sr-only">Slide template</label><select id="insert-kind"><option value="facts">Facts</option><option value="cards">Cards</option><option value="two-col">Two columns</option><option value="quote">Quotation</option><option value="big">Big statement</option><option value="part">Major part</option><option value="photo">Photo beat</option><option value="somber">Somber photo</option><option value="img">Whole image</option><option value="lens">Open / closed axis</option><option value="duo">Paired portraits</option><option value="scholar">Scholar citation</option></select><button id="insert-slide">Insert slide</button></div>
+        <div class="row"><label for="insert-kind" class="sr-only">Slide template</label><select id="insert-kind"><option value="facts">Facts</option><option value="cards">Cards</option><option value="two-col">Two columns</option><option value="quote">Quotation</option><option value="big">Big statement</option><option value="part">Major part</option><option value="photo">Photo beat</option><option value="somber">Somber photo</option><option value="img">Whole image</option><option value="lens">Spectrum / axis</option><option value="duo">Paired portraits</option><option value="scholar">Scholar citation</option></select><button id="insert-slide">Insert slide</button></div>
         <section class="element-tools" aria-label="Insert an element or tool">
           <label for="insert-element-kind">Insert an element or tool</label>
           <div class="row"><select id="insert-element-kind" aria-describedby="element-help element-placement"></select><button id="insert-element">Insert element</button></div>
@@ -75,6 +76,18 @@
 <input id="open-project-input" class="sr-only" type="file" accept=".json,.chartroom" tabindex="-1">
 <input id="import-notes-input" class="sr-only" type="file" accept=".md,.txt,text/plain,text/markdown" multiple tabindex="-1">
 <input id="import-images-input" class="sr-only" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple tabindex="-1">
+<dialog id="converter-dialog" aria-labelledby="converter-heading">
+  <div class="section-heading"><h2 id="converter-heading">Convert to draft notes</h2><button id="converter-close" autofocus>Close</button></div>
+  <p class="small">Paste rough text or choose a .txt, .md, .pptx, or HTML slideshow. Conversion runs on this device. It approximates headings and bullets, not slide design. Images and charts need adding separately.</p>
+  <label for="converter-title">Lecture title <span class="optional">optional; otherwise taken from the source</span></label><input id="converter-title" maxlength="1000">
+  <label for="converter-source">Raw text</label><textarea id="converter-source" rows="7" spellcheck="false" placeholder="Paste lecture text or an outline here"></textarea>
+  <div class="row"><button id="convert-text">Convert pasted text</button><button id="converter-file-button">Choose a file…</button></div>
+  <input id="converter-file" class="sr-only" type="file" accept=".txt,.md,.pptx,.html,.htm" tabindex="-1">
+  <p id="converter-status" role="status" aria-live="polite"></p><ul id="converter-warnings"></ul>
+  <label for="converter-draft">Draft Chartroom notes <span class="optional">review and edit before adding</span></label><textarea id="converter-draft" rows="10" spellcheck="false"></textarea>
+  <p class="small">Check wording, slide breaks, and private notes. Mark private explanations with <code>@notes</code>. The new lecture starts as “Coming soon”; make it available after cleanup. Nothing replaces your current lecture.</p>
+  <div class="row"><button id="converter-add" class="primary" disabled>Add as new draft lecture</button><button id="converter-save" disabled>Save draft .md</button></div>
+</dialog>
 <section id="presentation" role="dialog" aria-modal="true" aria-label="Lecture presentation" data-ready="false" hidden>
   <p id="presentation-status" role="status" aria-live="polite"></p>
   <div id="presentation-toolbar"><p>Arrows / Space: advance · Home / End: jump · Esc: return to Studio</p><button id="presentation-exit">Exit presentation</button></div>
@@ -86,6 +99,7 @@
 <script src="src/preflight.js"></script>
 <script src="src/insert.js"></script>
 <script src="src/presenter.js"></script>
+<script src="src/converter.js"></script>
 <script src="src/app.js"></script>
 </body>
 </html>

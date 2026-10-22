@@ -65,7 +65,7 @@
 </tr>
 <tr>
 <td><code>@lens</code></td>
-<td>Closed–open thematic axis, no guessed score</td>
+<td>Unscored axis; Closed/Open endpoints unless this slide supplies spectrum labels</td>
 </tr>
 <tr>
 <td><code>@duo</code> with two portrait directives</td>
@@ -226,7 +226,8 @@
 <li>Authors provide alt text, credit, license, and verified attribution. The tool does not certify rights, accuracy, or permission to distribute an image.</li>
 </ul>
 <h2>5. Meters are claims made by the author</h2>
-<p>No meter unless explicitly annotated. Values must be between 0% and 100%. Closed is rust at the left; open is olive at the right. Labels sit <strong>above</strong> the gradient track. Dual policy meters retain the author's directive order and labels. The software never assigns a historical openness score.</p>
+<p>No meter unless explicitly annotated. Values must be between 0% and 100%. By default, Closed is at the left and Open at the right, using the palette’s warm and cool colors (rust and olive in Classic). Labels sit <strong>above</strong> the gradient track. Dual policy meters retain the author's directive order and labels. The software never assigns a historical openness score.</p>
+<p><code>@spectrum Left label | Right label</code>, on its own line, replaces the endpoint text for that slide’s <code>@lens</code> axis and all its <code>@slider</code>, <code>@slider1</code>, and <code>@slider2</code> meters. It changes neither the numeric values nor the colors or individual meter names. It does not create a meter or axis by itself. The labels are per-slide: they do not inherit, and there is no global setting. Without the directive, Closed/Open is unchanged. The <strong>Insert an element or tool</strong> menu includes spectrum labels.</p>
 <h2>6. Teaching and review are different products</h2>
 <p><strong>Teaching:</strong> facts reveal one top-level point at a time; its children appear with it. Right/Space/PageDown advances a reveal, then a slide. Left/PageUp reverses reveals, then the slide. Home/End go to the endpoints. <code>@norev</code> or <code>@flash</code> reveals all facts immediately. Cards and columns show their complete authored structure. Position is saved under a content-specific key when browser storage is available; corrupted or blocked storage does not stop the deck.</p>
 <p><strong>Review:</strong> every point is visible. Selecting or reselecting any lecture starts at slide one. Previous/Next move whole slides and stop at boundaries. No teaching resume state is used. The navy-sidebar library is a separate output, with a coming-soon state, keyboard support, mobile lecture menu, and fullscreen viewing.</p>
@@ -234,7 +235,12 @@
 <h2>7. Offline, portable, and explicit</h2>
 <p>The runtime is HTML/CSS/JavaScript. An extracted local copy runs in a modern desktop browser without a server, developer installation, or network connection. A hosted copy needs a connection to load; there is no service worker or guaranteed offline reload. Browser support is recorded in <a href="VERIFICATION.html">verification</a>. Projects stay in the browser unless you save or share them yourself; there is no cloud sync. Browser localStorage is an unencrypted draft cache, not a backup. Use <strong>Save project</strong> before changing origins, browsers, or local copies, then <strong>Open project</strong> in the new app.</p>
 <p>The project is the source of truth. Exports are snapshots. Updating notes does not alter old downloads, another person's files, or a hosted site. Sharing and publication are manual. Export never pushes GitHub or deploys Apps Script.</p>
-<h2>8. Customization and extensions</h2>
+<h2>8. Conversion produces a draft, not a finished lecture</h2>
+<p><strong>Convert text / slideshow</strong> opens <strong>Convert to draft notes</strong>. It accepts pasted text or a <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, <code>.html</code>, or <code>.htm</code> file, with an optional title. Processing stays in the browser, with no uploads, and works in the extracted offline app. Google Slides and Keynote presentations must be exported as <code>.pptx</code>; older <code>.ppt</code> and PDF are unsupported. Export to <code>.pptx</code> or paste text instead.</p>
+<p>The draft is editable before <strong>Save draft .md</strong> or <strong>Add as new draft lecture</strong>. Adding creates a separate unavailable (<strong>Coming soon</strong>) lecture, never overwrites the current lecture, and does not make the draft public. Its library label may still appear. Review before making it available.</p>
+<p>Conversion approximates headings, list hierarchy, and slide boundaries without rewriting the source wording. It does not import images, charts, animations, or slide layout. This is a separate preparation step, not a relaxation of the annotation compiler’s strict grammar. <strong>Import .md / .txt notes</strong> remains the exact-annotations path. The legacy Python converter remains the fidelity-oriented option for supported older Chartroom HTML.</p>
+<p>PPTX speaker notes remain private, and explicit source private annotations are protected. Ambiguous Chartroom syntax may be placed in private notes with a warning for cleanup. Raw text and HTML still require a privacy review: no unmarked prose is inferred to be secret. Saved draft notes, like other source <code>.md</code> files, can contain private material and are not public handouts.</p>
+<h2>9. Customization and extensions</h2>
 <p>The engine is intentionally readable: grammar in <code>src/parser.js</code>, layout/CSS/player in <code>src/renderer.js</code>, project/ZIP checks in <code>src/package.js</code>, real-browser export gate in <code>src/preflight.js</code>, workshop UI in <code>src/app.js</code> and <code>src/studio.css</code>. The parser exposes its core rules as <code>ChartroomParser.rules</code>.</p>
 <p>To add a notation or change a design rule: write a failing test, update the parser/model and renderer consistently, update this rulebook and its examples, then run unit, browser, extracted-archive, and privacy checks. Never extend a directive by silently changing its existing meaning.</p>
 </body></html>

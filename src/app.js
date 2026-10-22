@@ -216,7 +216,66 @@
     finally{exportInProgress=false;rebuild();}
   }));
   $('save-notes').addEventListener('click',()=>{readFields();download(lecture().id+'.md',lecture().notes,'text/markdown;charset=utf-8');});
-  // Imports and slide templates are deliberately explicit; the compiler never guesses.
+  // Rough conversion is an explicit, reviewable step, separate from exact notes import.
+  let conversionGeneration=0, converterProject=null, converterBusy=false;
+  function converterButtons() {
+    const empty=!$('converter-draft').value.trim();
+    $('converter-add').disabled=$('converter-save').disabled=converterBusy||empty;
+    $('convert-text').disabled=$('converter-file-button').disabled=converterBusy;
+  }
+  $('open-converter').addEventListener('click',()=>{
+    clearTimeout(timer);readFields();autosave();rebuild();
+    converterProject=project;$('converter-dialog').showModal();
+  });
+  $('converter-close').addEventListener('click',()=>$('converter-dialog').close());
+  $('converter-dialog').addEventListener('close',()=>{
+    conversionGeneration++;converterBusy=false;converterButtons();$('open-converter').focus();
+  });
+  $('converter-draft').addEventListener('input',converterButtons);
+  async function convertDraft(readSource) {
+    if(converterBusy)return;
+    if($('converter-draft').value.trim()&&!confirm('Replace the draft in this converter? Save draft .md first if you need it.'))return;
+    const generation=++conversionGeneration;
+    converterBusy=true;converterButtons();$('converter-status').textContent='Converting…';
+    try {
+      const result=await readSource();
+      if(generation!==conversionGeneration||!$('converter-dialog').open)return;
+      $('converter-draft').value=result.notes;
+      $('converter-warnings').replaceChildren();
+      for(const warning of result.warnings){const li=document.createElement('li');li.textContent=warning;$('converter-warnings').append(li);}
+      const model=Parser.parse(result.notes);
+      $('converter-status').textContent=`Draft ready: ${model.slides.length} slides. Review the text and slide breaks below.`;
+    } catch(error) {
+      if(generation===conversionGeneration)$('converter-status').textContent='Conversion stopped: '+error.message;
+    } finally {
+      if(generation===conversionGeneration){converterBusy=false;converterButtons();}
+    }
+  }
+  $('convert-text').addEventListener('click',()=>convertDraft(()=>window.ChartroomConverter.fromText($('converter-source').value,{title:$('converter-title').value.trim()})));
+  $('converter-file-button').addEventListener('click',()=>$('converter-file').click());
+  $('converter-file').addEventListener('change',event=>{
+    const file=event.target.files[0];event.target.value='';if(!file)return;
+    const title=$('converter-title').value.trim();
+    convertDraft(()=>window.ChartroomConverter.fromFile(file,{title}));
+  });
+  $('converter-save').addEventListener('click',()=>download('draft-lecture.md',$('converter-draft').value,'text/markdown;charset=utf-8'));
+  $('converter-add').addEventListener('click',()=>{
+    try {
+      if(project!==converterProject)throw new Error('The project changed. Close and reopen the converter before adding this draft.');
+      readFields();
+      if(project.lectures.length>=200)throw new Error('Maximum 200 lectures per project.');
+      const notes=$('converter-draft').value;
+      if(!notes.trim())throw new Error('Convert or write some draft notes first.');
+      const model=Parser.parse(notes);
+      let n=project.lectures.length+1;while(project.lectures.some(l=>l.id===`lecture-${n}`))n++;
+      const entry={id:`lecture-${n}`,title:model.title||'Converted draft',notes,available:false};
+      project=P.validateProject({...project,lectures:[...project.lectures,entry]});
+      selected=project.lectures.length-1;downloaded=false;libraryPreview=false;showLecture();
+      $('converter-draft').value='';converterButtons();$('converter-dialog').close();
+      notice('Added a new draft lecture. Review its text, private notes, and slide breaks; then check Available for students. Existing lectures are unchanged.');
+    } catch(error){$('converter-status').textContent='Could not add draft: '+error.message;}
+  });
+  // Exact imports preserve the author's annotations; the compiler never guesses.
   $('import-notes').addEventListener('click',()=>$('import-notes-input').click());
   $('import-images').addEventListener('click',()=>$('import-images-input').click());
   $('import-notes-input').addEventListener('change',async event=>{
@@ -267,7 +326,7 @@
     photo:'## Your chapter @photo images/your-photo.jpg\n@alt Describe the photo\n@credit Add source and license\n',
     somber:'## Your solemn moment @somber images/your-photo.jpg\n@alt Describe the photo\n@credit Add source and license\n',
     img:'## Your figure @img images/your-figure.png\n@alt Describe the figure\n@credit Add source and license\n',
-    lens:'## The thematic spectrum @lens\n',
+    lens:'## The thematic spectrum @lens\n@spectrum Closed | Open\n',
     duo:'## Two people @duo\n@portrait images/one.jpg | Person One | Source and license | Portrait of Person One\n@portrait images/two.jpg | Person Two | Source and license | Portrait of Person Two\n',
     scholar:'## An authored reference @scholar images/portrait.jpg\n@alt Portrait description\n@citation Your verified citation\n@takeaway Your exact takeaway\n@credit Image source and license\n'
   };

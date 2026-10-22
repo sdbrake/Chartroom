@@ -1,4 +1,11 @@
 /* The workshop shell. Deck art direction is in renderer.js, not here. */
+#converter-dialog{width:min(820px,calc(100% - 24px));max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:24px;background:var(--paper);color:var(--ink)}
+#converter-dialog::backdrop{background:#182030b3}
+#converter-dialog label{margin-top:16px}
+#converter-dialog textarea{display:block;width:100%;resize:vertical;min-height:100px;border:1px solid var(--line);border-radius:4px;padding:12px;background:#fcfaf5;color:var(--ink);font:13px/1.6 Consolas,monospace;white-space:pre-wrap}
+#converter-dialog .row{margin-top:12px}#converter-dialog .small{margin:10px 0}
+#converter-status{margin-top:12px;font-size:13px}#converter-warnings{font-size:12px;padding-left:20px;overflow-wrap:anywhere}
+
 .element-tools{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:6px;background:#ffffff40}
 .element-tools .row{align-items:stretch}.element-tools select{flex:1 1 180px;max-width:100%}
 #element-help{margin-top:10px}#element-syntax{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Consolas,monospace;margin:8px 0;padding:9px 11px;border-radius:4px;background:var(--paper2);color:var(--ink)}
